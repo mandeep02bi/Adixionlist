@@ -25,14 +25,14 @@ class MedicineModel {
   String get name => medicineName;
   String get totalQuantity => qty;
   String get instructions => instruction;
-  
+
   // Getter for lab tests (when type == 'lab', medicineName holds the test name)
   String get testName => medicineName;
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'medicine_name': medicineName, 
+      'medicine_name': medicineName,
       'qty': qty,
       'frequency': frequency,
       'route_form': routeForm,
@@ -47,13 +47,14 @@ class MedicineModel {
     return MedicineModel(
       id: map['id'],
       medicineName: map['medicine_name'] ?? map['medicineName'] ?? '',
-      qty: map['qty'] ?? '',
+      qty: map['qty'] ?? map['total_quantity'] ?? '',
       frequency: map['frequency'] ?? '',
       routeForm: map['route_form'] ?? map['routeForm'] ?? '',
       noOfDays: map['no_of_days'] ?? map['noOfDays'] ?? '',
-      instruction: map['instruction'] ?? '',
+      instruction: map['instruction'] ?? map['instructions'] ?? '',
       type: map['type'] ?? 'medicine',
-      additionalComments: map['additional_comments'] ?? map['additionalComments'],
+      additionalComments:
+          map['additional_comments'] ?? map['additionalComments'],
     );
   }
 }

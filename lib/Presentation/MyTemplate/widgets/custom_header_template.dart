@@ -12,12 +12,14 @@ class CustomHeaderTemplate extends StatefulWidget {
   final String title;
   final Widget? bottomCard;
   final ValueChanged<int>? onTabChanged;
+  final String? templateType;
 
   const CustomHeaderTemplate({
     super.key,
     required this.title,
     this.bottomCard,
     this.onTabChanged,
+    this.templateType,
   });
 
   @override
@@ -37,11 +39,13 @@ class _CustomHeaderTemplateState extends State<CustomHeaderTemplate> {
   Widget _buildTabContent() {
     switch (_selectedIndex) {
       case 0:
-        return const MedicineTemplate();
+        return MedicineTemplate(
+          templateType: widget.templateType ?? "Medicine",
+        );
       case 1:
-        return const LabTemplate();
+        return LabTemplate(templateType: widget.templateType ?? "Lab Test");
       case 2:
-        return const ConsentTemplate();
+        return ConsentTemplate(templateType: widget.templateType ?? "Consent");
       default:
         return const SizedBox();
     }
@@ -228,10 +232,8 @@ class _CustomHeaderTemplateState extends State<CustomHeaderTemplate> {
               ),
           ],
         ),
-        _buildTabContent(),
+        Expanded(child: _buildTabContent()),
       ],
     );
   }
 }
-
-

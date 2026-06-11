@@ -58,18 +58,29 @@ class PatineWidgetsTemplate extends StatelessWidget {
               // 🗑 Delete
               GestureDetector(
                 onTap: onDelete,
-                child: Image.asset(ImageAssets.delete, height: 22.h, width: 22.w),
+                child: Image.asset(
+                  ImageAssets.delete,
+                  height: 22.h,
+                  width: 22.w,
+                ),
               ),
               SizedBox(width: 8.w),
               // ✏️ Edit
               GestureDetector(
                 onTap: onEdit,
-                child: Image.asset(ImageAssets.pencile, height: 16.h, width: 16.w),
+                child: Image.asset(
+                  ImageAssets.pencile,
+                  height: 16.h,
+                  width: 16.w,
+                ),
               ),
               SizedBox(width: 8.w),
               // 👁 View
               GestureDetector(
-                onTap: onView,
+                onTap: () {
+                  print("EYE CLICKED");
+                  onView?.call();
+                },
                 child: Image.asset(ImageAssets.eye, height: 27.h, width: 25.w),
               ),
             ],
@@ -79,4 +90,3 @@ class PatineWidgetsTemplate extends StatelessWidget {
     );
   }
 }
-

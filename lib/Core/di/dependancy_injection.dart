@@ -12,6 +12,10 @@ import 'package:doctor/Presentation/AuthScreen/data/repo/forgot_password_repo.da
 import 'package:doctor/Presentation/AuthScreen/logic/forgot_password/forgot_password_cubit.dart';
 import 'package:doctor/Presentation/AuthScreen/logic/login/login_cubit.dart';
 import 'package:doctor/Presentation/AuthScreen/logic/register/register_cubit.dart';
+import 'package:doctor/Presentation/MyTemplate/Data/api/template_service.dart';
+import 'package:doctor/Presentation/MyTemplate/Data/repository/template_repository.dart';
+
+import 'package:doctor/Presentation/MyTemplate/cubit/template_cubit.dart';
 import 'package:doctor/Presentation/Patient/data/api/patient_api_service.dart';
 import 'package:doctor/Presentation/Patient/data/repo/patient_repo.dart';
 import 'package:doctor/Presentation/Patient/logic/patient_cubit.dart';
@@ -173,5 +177,19 @@ Future<void> setupGetIt() async {
 
   getIt.registerFactory<PrescriptionCubit>(
     () => PrescriptionCubit(prescriptionRepo: getIt()),
+  );
+
+  /// TEMPLATE
+
+  getIt.registerLazySingleton<TemplateApiService>(
+    () => TemplateApiService(dio),
+  );
+
+  getIt.registerLazySingleton<TemplateRepo>(
+    () => TemplateRepo(templateApiService: getIt()),
+  );
+
+  getIt.registerFactory<TemplateCubit>(
+    () => TemplateCubit(templateRepo: getIt()),
   );
 }
