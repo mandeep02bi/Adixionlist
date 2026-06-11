@@ -1,11 +1,21 @@
+import 'dart:convert';
+
 import 'package:doctor/Core/di/dependancy_injection.dart';
+import 'package:doctor/Core/helper/image_assets.dart';
 import 'package:doctor/Core/services/prescription_pdf_service.dart';
+import 'package:doctor/Core/widgets/custom_button.dart';
 import 'package:doctor/Data/model/lab_test_request_body.dart';
 import 'package:doctor/Data/model/medicine_request_body.dart';
 import 'package:doctor/Data/model/prescription_request_body.dart';
+import 'package:doctor/Presentation/MyTemplate/my_template.dart';
 import 'package:doctor/Presentation/Patient/data/models/patient_model.dart';
 import 'package:doctor/Presentation/Prescription/cubit/prescription_cubit.dart';
 import 'package:doctor/Presentation/Prescription/cubit/prescription_state.dart';
+import 'package:doctor/Presentation/Prescription/widgets/custom_hader_preview.dart';
+import 'package:doctor/Presentation/Prescription/widgets/custom_tab_bar.dart';
+import 'package:doctor/Presentation/Prescription/widgets/custom_text_form_field.dart';
+import 'package:doctor/Presentation/Prescription/widgets/empty_state.dart';
+import 'package:doctor/Presentation/Prescription/widgets/medicine_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -133,8 +143,8 @@ class _PrescriptionFormScreenState extends State<PrescriptionFormScreen> {
 
             child: Scaffold(
               resizeToAvoidBottomInset: true,
-              backgroundColor: const Color(0xff1C034F),
 
+              // backgroundColor: const Color(0xff1C034F),
               body: Stack(
                 children: [
                   /// MAIN BODY
@@ -144,61 +154,8 @@ class _PrescriptionFormScreenState extends State<PrescriptionFormScreen> {
                         SizedBox(height: 10.h),
 
                         /// HEADER
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 18.r,
-                                backgroundColor: Colors.white24,
-                                child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: Icon(
-                                    Icons.arrow_back_ios_new,
-                                    color: Colors.white,
-                                    size: 16.sp,
-                                  ),
-                                ),
-                              ),
-
-                              SizedBox(width: 12.w),
-
-                              Text(
-                                "Write Prescription",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-
-                              const Spacer(),
-
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 10.w,
-                                  vertical: 6.h,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white24,
-                                  borderRadius: BorderRadius.circular(100.r),
-                                ),
-                                child: Text(
-                                  "12 Mar 2026",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10.sp,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        SizedBox(height: 18.h),
+                        CustomHaderPreview(title: "Write Prescription"),
+                        SizedBox(height: 10.h),
 
                         /// MAIN CONTAINER
                         Expanded(
@@ -507,341 +464,592 @@ class _PrescriptionFormScreenState extends State<PrescriptionFormScreen> {
 
   /// CASE HISTORY UI
   Widget _caseHistoryUI() {
-    return Column(
-      children: [
-        _field("Diagnosis By Staff", diagnosisByStaffController),
-        _field("Diagnosis", diagnosisController),
-        _field("Findings", findingsController),
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          CustomTextFormField(
+            label: "Diagnosis By Staff",
+            hint: "Enter diagnosis by staff",
+            controller: diagnosisByStaffController,
+            fieldFillColor: const Color(0xFFF9FCFF),
+          ),
 
-        Row(
-          children: [
-            Expanded(child: _field("Height", heightController)),
+          SizedBox(height: 12.h),
 
-            SizedBox(width: 10.w),
+          CustomTextFormField(
+            label: "Diagnosis",
+            hint: "Enter diagnosis",
+            controller: diagnosisController,
+            fieldFillColor: const Color(0xFFF9FCFF),
+          ),
 
-            Expanded(child: _field("Weight", weightController)),
-          ],
-        ),
+          SizedBox(height: 12.h),
 
-        Row(
-          children: [
-            Expanded(child: _field("BP", bloodPressureController)),
+          CustomTextFormField(
+            label: "Findings",
+            hint: "Enter findings",
+            controller: findingsController,
+            fieldFillColor: const Color(0xFFF9FCFF),
+          ),
 
-            SizedBox(width: 10.w),
+          SizedBox(height: 16.h),
 
-            Expanded(child: _field("Hemoglobin", hemoglobinController)),
-          ],
-        ),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextFormField(
+                  label: "Height",
+                  hint: "170",
+                  controller: heightController,
+                  fieldFillColor: const Color(0xFFF9FCFF),
+                ),
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: CustomTextFormField(
+                  label: "Weight",
+                  hint: "65",
+                  controller: weightController,
+                  fieldFillColor: const Color(0xFFF9FCFF),
+                ),
+              ),
+            ],
+          ),
 
-        _field("Temperature", temperatureController),
-        _field("Chief Complaint", chiefComplaintController),
-        _field("History", historyController),
-        _field("Treatment Advice", treatmentController),
+          SizedBox(height: 12.h),
 
-        Row(
-          children: [
-            Expanded(child: _field("SPO2", spo2Controller)),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextFormField(
+                  label: "Blood Pressure",
+                  hint: "120/80",
+                  controller: bloodPressureController,
+                  fieldFillColor: const Color(0xFFF9FCFF),
+                ),
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: CustomTextFormField(
+                  label: "Hemoglobin",
+                  hint: "13",
+                  controller: hemoglobinController,
+                  fieldFillColor: const Color(0xFFF9FCFF),
+                ),
+              ),
+            ],
+          ),
 
-            SizedBox(width: 10.w),
+          SizedBox(height: 12.h),
 
-            Expanded(child: _field("Respiratory", respirationController)),
-          ],
-        ),
+          CustomTextFormField(
+            label: "Temperature",
+            hint: "98.6",
+            controller: temperatureController,
+            fieldFillColor: const Color(0xFFF9FCFF),
+          ),
 
-        _field("Doctor Notes", notesController),
-        _field("Follow-Up Date", followUpDateController),
-      ],
+          SizedBox(height: 12.h),
+
+          CustomTextFormField(
+            label: "Chief Complaint",
+            hint: "Enter chief complaint",
+            controller: chiefComplaintController,
+            fieldFillColor: const Color(0xFFF9FCFF),
+          ),
+
+          SizedBox(height: 12.h),
+
+          CustomTextFormField(
+            label: "History",
+            hint: "Patient history",
+            controller: historyController,
+            keyboardType: TextInputType.multiline,
+            fieldFillColor: const Color(0xFFF9FCFF),
+          ),
+
+          SizedBox(height: 12.h),
+
+          CustomTextFormField(
+            label: "Treatment Advice",
+            hint: "Treatment advice",
+            controller: treatmentController,
+            keyboardType: TextInputType.multiline,
+            fieldFillColor: const Color(0xFFF9FCFF),
+          ),
+
+          SizedBox(height: 12.h),
+
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextFormField(
+                  label: "SPO2",
+                  hint: "98%",
+                  controller: spo2Controller,
+                  fieldFillColor: const Color(0xFFF9FCFF),
+                ),
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: CustomTextFormField(
+                  label: "Respiratory",
+                  hint: "16",
+                  controller: respirationController,
+                  fieldFillColor: const Color(0xFFF9FCFF),
+                ),
+              ),
+            ],
+          ),
+
+          SizedBox(height: 12.h),
+
+          CustomTextFormField(
+            label: "Doctor Notes",
+            hint: "Add notes",
+            controller: notesController,
+            keyboardType: TextInputType.multiline,
+            fieldFillColor: const Color(0xFFF9FCFF),
+          ),
+
+          SizedBox(height: 12.h),
+
+          CustomTextFormField(
+            label: "Follow Up Date",
+            hint: "YYYY/DD/MM",
+            controller: followUpDateController,
+            fieldFillColor: const Color(0xFFF9FCFF),
+          ),
+        ],
+      ),
     );
   }
 
   /// MEDICINE UI
+
   Widget _medicineUI() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _field("Medicine Name", medicineNameController),
-
-        Row(
-          children: [
-            Expanded(child: _field("Frequency", frequencyController)),
-
-            SizedBox(width: 10.w),
-
-            Expanded(child: _field("Route", routeController)),
-          ],
-        ),
-
-        Row(
-          children: [
-            Expanded(child: _field("No Of Days", daysController)),
-
-            SizedBox(width: 10.w),
-
-            Expanded(child: _field("Qty", qtyController)),
-          ],
-        ),
-
-        _field("Instruction", instructionController),
-
-        SizedBox(height: 10.h),
-
-        Row(
-          children: [
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () {
-                  medicines.add(
-                    MedicineRequestBody(
-                      name: medicineNameController.text,
-                      frequency: frequencyController.text,
-                      noOfDays: daysController.text,
-                      routeForm: routeController.text,
-                      instructions: instructionController.text,
-                      totalQuantity: qtyController.text,
-                    ),
-                  );
-
-                  medicineNameController.clear();
-                  frequencyController.clear();
-                  daysController.clear();
-                  routeController.clear();
-                  instructionController.clear();
-                  qtyController.clear();
-
-                  setState(() {});
-                },
-
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xff57D3BE),
-
-                  side: const BorderSide(color: Color(0xff57D3BE)),
-
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100.r),
-                  ),
-                ),
-
-                child: const Text("Save and Add"),
+        Container(
+          padding: EdgeInsets.all(16.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
               ),
-            ),
-
-            SizedBox(width: 10.w),
-
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () {},
-
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xff57D3BE),
-
-                  side: const BorderSide(color: Color(0xff57D3BE)),
-
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100.r),
-                  ),
-                ),
-
-                child: const Text("Choose Template"),
-              ),
-            ),
-          ],
-        ),
-
-        SizedBox(height: 15.h),
-
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: medicines.length,
-          itemBuilder: (context, index) {
-            final medicine = medicines[index];
-
-            return Container(
-              margin: EdgeInsets.only(bottom: 10.h),
-
-              padding: EdgeInsets.all(12.w),
-
-              decoration: BoxDecoration(
-                color: const Color(0xffF7F8FA),
-
-                borderRadius: BorderRadius.circular(14.r),
+            ],
+          ),
+          child: Column(
+            children: [
+              CustomTextFormField(
+                label: "Medicine Name",
+                hint: "Enter medicine name",
+                controller: medicineNameController,
+                fieldFillColor: const Color(0xFFF9FCFF),
               ),
 
-              child: Row(
+              SizedBox(height: 12.h),
+
+              Row(
                 children: [
-                  CircleAvatar(
-                    radius: 18.r,
-                    backgroundColor: const Color(0xffF7C948),
+                  Expanded(
+                    child: CustomTextFormField(
+                      label: "Frequency",
+                      hint: "1x/day",
+                      controller: frequencyController,
+                      fieldFillColor: const Color(0xFFF9FCFF),
+                    ),
+                  ),
+                  SizedBox(width: 10.w),
+                  Expanded(
+                    child: CustomTextFormField(
+                      label: "Route",
+                      hint: "Oral",
+                      controller: routeController,
+                      fieldFillColor: const Color(0xFFF9FCFF),
+                    ),
+                  ),
+                ],
+              ),
 
-                    child: Icon(
-                      Icons.medication,
-                      size: 16.sp,
-                      color: Colors.white,
+              SizedBox(height: 12.h),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomTextFormField(
+                      label: "No Of Days",
+                      hint: "7",
+                      controller: daysController,
+                      fieldFillColor: const Color(0xFFF9FCFF),
+                    ),
+                  ),
+                  SizedBox(width: 10.w),
+                  Expanded(
+                    child: CustomTextFormField(
+                      label: "Qty",
+                      hint: "10",
+                      controller: qtyController,
+                      fieldFillColor: const Color(0xFFF9FCFF),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 12.h),
+
+              CustomTextFormField(
+                label: "Instruction",
+                hint: "After meals",
+                controller: instructionController,
+                keyboardType: TextInputType.multiline,
+                fieldFillColor: const Color(0xFFF9FCFF),
+              ),
+
+              SizedBox(height: 20.h),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomButton(
+                      text: "Save and Add",
+                      buttonColor: Colors.white,
+                      border: Border.all(color: const Color(0xff57D3BE)),
+                      textStyle: TextStyle(
+                        color: const Color(0xff57D3BE),
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      onPressed: () {
+                        print(
+                          "Medicine Name => ${medicineNameController.text}",
+                        );
+                        print("Frequency => ${frequencyController.text}");
+                        print("Route => ${routeController.text}");
+                        print("Days => ${daysController.text}");
+                        print("Qty => ${qtyController.text}");
+                        print("Instruction => ${instructionController.text}");
+
+                        final medicine = MedicineRequestBody(
+                          name: medicineNameController.text.trim(),
+                          frequency: frequencyController.text.trim(),
+                          noOfDays: daysController.text.trim(),
+                          routeForm: routeController.text.trim(),
+                          instructions: instructionController.text.trim(),
+                          totalQuantity: qtyController.text.trim(),
+                        );
+
+                        print("MEDICINE JSON => ${medicine.toJson()}");
+                        print("ADDING MEDICINE => ${medicine.toJson()}");
+
+                        medicines.add(medicine);
+
+                        medicineNameController.clear();
+                        frequencyController.clear();
+                        daysController.clear();
+                        routeController.clear();
+                        instructionController.clear();
+                        qtyController.clear();
+
+                        setState(() {});
+                      },
                     ),
                   ),
 
                   SizedBox(width: 10.w),
 
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-
-                      children: [
-                        Text(
-                          medicine.name,
-
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w600,
+                    child: CustomButton(
+                      text: "Choose Template",
+                      buttonColor: Colors.white,
+                      border: Border.all(color: const Color(0xff57D3BE)),
+                      textStyle: TextStyle(
+                        color: const Color(0xff57D3BE),
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      onPressed: () async {
+                        final selectedTemplate = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const MyTemplate(type: "Medicine"),
                           ),
-                        ),
+                        );
 
-                        SizedBox(height: 4.h),
+                        if (selectedTemplate != null) {
+                          final data = jsonDecode(selectedTemplate);
 
-                        Text(
-                          "${medicine.frequency} • "
-                          "${medicine.noOfDays} Days",
+                          medicineNameController.text =
+                              data["medicine_name"] ?? "";
 
-                          style: TextStyle(fontSize: 10.sp, color: Colors.grey),
-                        ),
-                      ],
+                          frequencyController.text = data["frequency"] ?? "";
+
+                          routeController.text = data["route_form"] ?? "";
+
+                          daysController.text = data["no_of_days"] ?? "";
+
+                          qtyController.text = data["total_quantity"] ?? "";
+
+                          instructionController.text =
+                              data["instructions"] ?? "";
+
+                          setState(() {});
+                        }
+                      },
                     ),
                   ),
                 ],
               ),
-            );
-          },
+            ],
+          ),
         ),
+
+        SizedBox(height: 20.h),
+
+        if (medicines.isEmpty)
+          const EmptyState(
+            icon: ImageAssets.drugs,
+            title: "No Medicines Added",
+            subtitle: "Added medicines will appear here",
+          ),
+
+        if (medicines.isNotEmpty)
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: medicines.length,
+            itemBuilder: (context, index) {
+              final medicine = medicines[index];
+
+              return MedicineCard(
+                medicineName: medicine.name,
+                dosage: medicine.totalQuantity ?? "",
+                frequency: medicine.frequency ?? "",
+                days: medicine.noOfDays ?? "",
+                onDelete: () {
+                  medicines.removeAt(index);
+                  setState(() {});
+                },
+              );
+            },
+          ),
       ],
     );
   }
 
   /// LAB TEST UI
+
   Widget _labTestUI() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _field("Lab Test Name", labTestController),
-        _field("Additional Comments", labCommentController),
-
-        SizedBox(height: 10.h),
-
-        Row(
-          children: [
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () {
-                  labTests.add(
-                    LabTestRequestBody(
-                      testName: labTestController.text,
-                      additionalComments: labCommentController.text,
-                    ),
-                  );
-
-                  labTestController.clear();
-                  labCommentController.clear();
-
-                  setState(() {});
-                },
-
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xff57D3BE),
-
-                  side: const BorderSide(color: Color(0xff57D3BE)),
-
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100.r),
-                  ),
-                ),
-
-                child: const Text("Save and Add"),
+        Container(
+          padding: EdgeInsets.all(16.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
               ),
-            ),
-
-            SizedBox(width: 10.w),
-
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () {},
-
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xff57D3BE),
-
-                  side: const BorderSide(color: Color(0xff57D3BE)),
-
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100.r),
-                  ),
-                ),
-
-                child: const Text("Choose Template"),
-              ),
-            ),
-          ],
-        ),
-
-        SizedBox(height: 15.h),
-
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: labTests.length,
-          itemBuilder: (context, index) {
-            final lab = labTests[index];
-
-            return Container(
-              margin: EdgeInsets.only(bottom: 10.h),
-
-              padding: EdgeInsets.all(12.w),
-
-              decoration: BoxDecoration(
-                color: const Color(0xffF7F8FA),
-
-                borderRadius: BorderRadius.circular(14.r),
+            ],
+          ),
+          child: Column(
+            children: [
+              CustomTextFormField(
+                label: "Lab Test Name",
+                hint: "Enter lab test name",
+                controller: labTestController,
+                fieldFillColor: const Color(0xFFF9FCFF),
               ),
 
-              child: Row(
+              SizedBox(height: 12.h),
+
+              CustomTextFormField(
+                label: "Additional Comments",
+                hint: "Add notes or instructions",
+                controller: labCommentController,
+                keyboardType: TextInputType.multiline,
+                fieldFillColor: const Color(0xFFF9FCFF),
+              ),
+
+              SizedBox(height: 20.h),
+
+              Row(
                 children: [
-                  CircleAvatar(
-                    radius: 18.r,
-                    backgroundColor: const Color(0xff57D3BE),
+                  Expanded(
+                    child: CustomButton(
+                      text: "Save and Add",
+                      buttonColor: Colors.white,
+                      border: Border.all(color: const Color(0xff57D3BE)),
+                      textStyle: TextStyle(
+                        color: const Color(0xff57D3BE),
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      onPressed: () {
+                        labTests.add(
+                          LabTestRequestBody(
+                            testName: labTestController.text,
+                            additionalComments: labCommentController.text,
+                          ),
+                        );
 
-                    child: Icon(
-                      Icons.science,
-                      size: 16.sp,
-                      color: Colors.white,
+                        labTestController.clear();
+                        labCommentController.clear();
+
+                        setState(() {});
+                      },
                     ),
                   ),
 
                   SizedBox(width: 10.w),
 
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-
-                      children: [
-                        Text(
-                          lab.testName,
-
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w600,
+                    child: CustomButton(
+                      text: "Choose Template",
+                      buttonColor: Colors.white,
+                      border: Border.all(color: const Color(0xff57D3BE)),
+                      textStyle: TextStyle(
+                        color: const Color(0xff57D3BE),
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      onPressed: () async {
+                        final selectedTemplate = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const MyTemplate(type: "Lab Test"),
                           ),
-                        ),
+                        );
+                        print("Returned Template = $selectedTemplate");
 
-                        SizedBox(height: 4.h),
+                        if (selectedTemplate != null) {
+                          final data = jsonDecode(selectedTemplate);
 
-                        Text(
-                          lab.additionalComments ?? "",
+                          labTestController.text =
+                              data["test_name"] ??
+                              data["lab_test_name"] ??
+                              data["name"] ??
+                              "";
 
-                          style: TextStyle(fontSize: 10.sp, color: Colors.grey),
-                        ),
-                      ],
+                          labCommentController.text =
+                              data["additional_comments"] ??
+                              data["comments"] ??
+                              data["instructions"] ??
+                              "";
+
+                          setState(() {});
+                        }
+                      },
                     ),
                   ),
                 ],
               ),
-            );
-          },
+            ],
+          ),
         ),
+
+        SizedBox(height: 20.h),
+
+        if (labTests.isEmpty)
+          const EmptyState(
+            icon: ImageAssets.lab,
+            title: "No Lab Tests Added",
+            subtitle: "Added lab tests will appear here",
+          ),
+
+        if (labTests.isNotEmpty)
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: labTests.length,
+            itemBuilder: (context, index) {
+              final lab = labTests[index];
+
+              return Container(
+                margin: EdgeInsets.only(bottom: 12.h),
+                padding: EdgeInsets.all(14.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.r),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 8,
+                      color: Colors.black.withOpacity(0.05),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 18.r,
+                      backgroundColor: const Color(0xFFE8F8F4),
+                      child: Icon(
+                        Icons.science,
+                        size: 18.sp,
+                        color: const Color(0xff57D3BE),
+                      ),
+                    ),
+
+                    SizedBox(width: 12.w),
+
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            lab.testName,
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+
+                          SizedBox(height: 4.h),
+
+                          Text(
+                            lab.additionalComments ?? "",
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    IconButton(
+                      onPressed: () {
+                        labTests.removeAt(index);
+                        setState(() {});
+                      },
+                      icon: const Icon(Icons.delete_outline),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
       ],
     );
   }

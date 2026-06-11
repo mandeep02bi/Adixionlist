@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:doctor/Core/di/dependancy_injection.dart';
+import 'package:doctor/Presentation/MyTemplate/cubit/template_cubit.dart';
 import 'package:doctor/core/Theme/color_app.dart';
 import 'package:doctor/Core/helper/image_assets.dart';
 import 'package:doctor/Data/Data_source/Medicine_datasource.dart';
@@ -153,7 +157,7 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: Container( 
+          child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -189,13 +193,10 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Image.asset(
-                        ImageAssets.remove,
-                        height: 35,
-                        width: 35,
-                      ),
+
+                    IconButton(
+                      onPressed: _saveAsTemplate,
+                      icon: const Icon(Icons.add_circle_outline),
                     ),
                   ],
                 ),
@@ -399,5 +400,33 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
         );
       },
     );
+  }
+
+  Future<void> _saveAsTemplate() async {
+    final success = await getIt<TemplateCubit>().createTemplate(
+      type: widget.showMedicineFields ? "Medicine" : "Lab Test",
+
+      title: medicineNameController.text.trim(),
+
+      content: widget.showMedicineFields
+          ? jsonEncode({
+              "medicine_name": medicineNameController.text.trim(),
+              "frequency": frequencyController.text.trim(),
+              "route_form": routeFormController.text.trim(),
+              "no_of_days": noOfDaysController.text.trim(),
+              "total_quantity": qtyController.text.trim(),
+              "instructions": instructionController.text.trim(),
+            })
+          : jsonEncode({
+              "test_name": medicineNameController.text.trim(),
+              "additional_comments": instructionController.text.trim(),
+            }),
+    );
+
+    if (success) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Template Saved")));
+    }
   }
 }

@@ -48,7 +48,7 @@ class ApiConst {
   // =========================
   // TEMPLATE APIs
   // =========================
-  static const String templates = '/templates';
+  static const String templatesEndpoint = '/templates';
   static const String templateSearch = '/templates/search';
 
   // =========================

@@ -40,7 +40,7 @@ class RecordSection extends StatelessWidget {
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: () => Get.to(const MyTemplate()),
+                onTap: () => Get.to(const MyTemplate(type: "Medicine")),
                 child: const RecordCard(
                   items: "assets/Icons/temp.png",
                   itemname: "My Template",
@@ -65,4 +65,3 @@ class RecordSection extends StatelessWidget {
     );
   }
 }
-

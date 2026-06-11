@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ConsentTemplate extends StatelessWidget {
-  const ConsentTemplate({super.key});
+  final String templateType;
+  const ConsentTemplate({super.key, required this.templateType});
 
   @override
   Widget build(BuildContext context) {
@@ -38,4 +39,3 @@ class ConsentTemplate extends StatelessWidget {
     );
   }
 }
-
