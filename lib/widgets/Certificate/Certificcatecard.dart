@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 
+import '../../Presentation/Certificate/CertificatePdfScreen.dart';
+
 class CertificateCard extends StatelessWidget {
   final String title;
   final String date;
+  final String patientName;
+  final String description;
+  final String doctorName;
 
-  const CertificateCard({super.key, required this.title, required this.date});
+  const CertificateCard({
+    super.key,
+    required this.title,
+    required this.date,
+    required this.description,
+    required this.doctorName,
+    required this.patientName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +80,22 @@ class CertificateCard extends StatelessWidget {
           const SizedBox(width: 10),
 
           /// 👁 ICON
-          Image.asset("assets/Icons/Eye.png", height: 22, width: 22),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => CertificatePdfScreen(
+                    patientName: patientName ?? "",
+                    title: title,
+                    description: description,
+                    doctorName: doctorName ?? "",
+                  ),
+                ),
+              );
+            },
+            child: Image.asset("assets/Icons/Eye.png", height: 22, width: 22),
+          ),
         ],
       ),
     );

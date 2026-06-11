@@ -134,8 +134,23 @@ class _InstructionState extends State<Instruction> {
                               borderRadius: BorderRadius.circular(14.r),
                             ),
                             child: ExpansionTile(
+                              trailing: PopupMenuButton<String>(
+                                itemBuilder: (_) => const [
+                                  PopupMenuItem(
+                                    value: "edit",
+                                    child: Text("Edit"),
+                                  ),
+                                  PopupMenuItem(
+                                    value: "delete",
+                                    child: Text("Delete"),
+                                  ),
+                                ],
+                                onSelected: (value) {
+                                  // edit or delete
+                                },
+                              ),
                               title: Text(
-                                item.title,
+                                item.title??"",
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14.sp,
@@ -143,7 +158,7 @@ class _InstructionState extends State<Instruction> {
                                 ),
                               ),
                               subtitle: Text(
-                                _formatDate(item.instructionDate),
+                                _formatDate(item.instructionDate??""),
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   color: Colors.grey,
@@ -154,7 +169,7 @@ class _InstructionState extends State<Instruction> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    item.description,
+                                    item.description??"",
                                     style: TextStyle(
                                       fontSize: 13.sp,
                                       color: Colors.black54,

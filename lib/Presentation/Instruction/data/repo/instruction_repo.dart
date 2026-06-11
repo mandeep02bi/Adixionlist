@@ -20,6 +20,8 @@ class InstructionRepo {
 
       return ApiResult.success(response);
     } catch (error) {
+      print("CREATE INSTRUCTION ERROR:");
+      print(error);
       return ApiResult.error(ErrorHandler.handle(error));
     }
   }
@@ -39,4 +41,28 @@ class InstructionRepo {
       return ApiResult.error(ErrorHandler.handle(error));
     }
   }
+
+  Future<ApiResult<InstructionResponse>> updateInstruction(
+      int id,
+      InstructionRequestBody body,
+      ) async {
+    try {
+      final response = await instructionApiService.updateInstruction(id, body);
+      return ApiResult.success(response);
+    } catch (error) {
+      return ApiResult.error(ErrorHandler.handle(error));
+    }
+  }
+
+  Future<ApiResult<InstructionResponse>> deleteInstruction(
+      int id,
+      ) async {
+    try {
+      final response = await instructionApiService.deleteInstruction(id);
+      return ApiResult.success(response);
+    } catch (error) {
+      return ApiResult.error(ErrorHandler.handle(error));
+    }
+  }
+
 }
