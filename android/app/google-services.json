@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "913737966238",
+    "project_id": "adixion-8988f",
+    "storage_bucket": "adixion-8988f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913737966238:android:efcb235bb5552e8dfa518f",
+        "android_client_info": {
+          "package_name": "com.example.untitled"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3_N2DopxQnP92-i7IfjJ02qWSRUkEUdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
