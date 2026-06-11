@@ -130,6 +130,9 @@ class _CertificateState extends State<Certificate> {
                           return CertificateCard(
                             title: item.title,
                             date: _formatDate(item.certificateDate),
+                            patientName: widget.patient.fullName,
+                            description: item.description ?? "",
+                            doctorName: item.doctorName ?? "",
                           );
                         },
                       );
@@ -172,4 +175,4 @@ class _CertificateState extends State<Certificate> {
     if (m < 1 || m > 12) return "";
     return months[m - 1];
   }
-}
+}
