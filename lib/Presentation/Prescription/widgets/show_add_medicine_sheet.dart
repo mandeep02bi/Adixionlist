@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:doctor/Core/di/dependancy_injection.dart';
+import 'package:doctor/Presentation/Consent/cubit/consent_cubit.dart';
 import 'package:doctor/Presentation/MyTemplate/cubit/template_cubit.dart';
+import 'package:doctor/Presentation/MyTemplate/my_template.dart';
 import 'package:doctor/core/Theme/color_app.dart';
 import 'package:doctor/Core/helper/image_assets.dart';
 import 'package:doctor/Data/Data_source/Medicine_datasource.dart';
@@ -9,9 +11,13 @@ import 'package:doctor/Data/model/medicine_model.dart';
 import 'package:doctor/widgets/Add_patient/custom_button.dart';
 import 'package:doctor/widgets/Add_patient/custom_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> showAddMedicineSheet(
   BuildContext context, {
+  String? patientCode,
+  String formType = "medicine",
   String? title,
   String? nameOf,
   String? lableqty,
@@ -52,6 +58,7 @@ Future<void> showAddMedicineSheet(
       textButtom: textButtom,
       iconButtom: iconButtom,
       showMedicineFields: showMedicineFields,
+      formType: formType,
     ),
   );
 }
@@ -74,6 +81,8 @@ class AddMedicineSheet extends StatefulWidget {
   final String? iconButtom;
   final bool showMedicineFields;
   final Widget? customButtom;
+  final String formType;
+  final String? patientCode;
 
   const AddMedicineSheet({
     super.key,
@@ -94,6 +103,8 @@ class AddMedicineSheet extends StatefulWidget {
     this.textButtom,
     this.iconButtom,
     this.showMedicineFields = true,
+    this.formType = "medicine",
+    this.patientCode,
   });
 
   @override
@@ -266,8 +277,72 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
                           CustomButton(
                             height: 60,
                             width: 150,
-                            onPressed: () {},
+                            onPressed: () async {
+                              if (medicineNameController.text.trim().isEmpty)
+                                return;
+
+                              final medicine = MedicineModel(
+                                medicineName: medicineNameController.text
+                                    .trim(),
+                                qty: qtyController.text.trim(),
+                                frequency: frequencyController.text.trim(),
+                                routeForm: routeFormController.text.trim(),
+                                noOfDays: noOfDaysController.text.trim(),
+                                instruction: instructionController.text.trim(),
+                                type: widget.showMedicineFields
+                                    ? 'medicine'
+                                    : 'lab',
+                              );
+
+                              if (widget.formType == "medicine") {
+                                await MedicineDatabase.instance.insertMedicine(
+                                  medicine,
+                                );
+                              } else if (widget.formType == "lab") {
+                                await MedicineDatabase.instance.insertMedicine(
+                                  medicine,
+                                );
+                                // } else if (widget.formType == "consent") {
+                                //   await context
+                                //       .read<ConsentCubit>()
+                                //       .createConsent(
+                                //     patientCode: widget.patientCode ?? "",
+                                //         title: medicineNameController.text.trim(),
+                                //         description: instructionController.text
+                                //             .trim(),
+                                //         consentDate: DateTime.now()
+                                //             .toIso8601String()
+                                //             .split('T')
+                                //             .first,
+                                //       );
+                                // }
+                              } else if (widget.formType == "consent") {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      "Patient code integration pending",
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              medicineNameController.clear();
+                              qtyController.clear();
+                              frequencyController.clear();
+                              routeFormController.clear();
+                              noOfDaysController.clear();
+                              instructionController.clear();
+
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Added successfully"),
+                                  ),
+                                );
+                              }
+                            },
                             text: 'Save and Add',
+
                             textStyle: TextStyle(
                               fontSize: 12,
                               color: ColorApp.textColor,
@@ -287,9 +362,42 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
                           CustomButton(
                             height: 60,
                             width: 150,
+                            onPressed: () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => MyTemplate(
+                                    type: widget.showMedicineFields
+                                        ? "Medicine"
+                                        : "Lab Test",
+                                  ),
+                                ),
+                              );
 
-                            onPressed: () {},
+                              if (result != null) {
+                                final data = jsonDecode(result.toString());
+
+                                medicineNameController.text =
+                                    data["medicine_name"] ?? "";
+
+                                qtyController.text =
+                                    data["total_quantity"] ?? "";
+
+                                frequencyController.text =
+                                    data["frequency"] ?? "";
+
+                                routeFormController.text =
+                                    data["route_form"] ?? "";
+
+                                noOfDaysController.text =
+                                    data["no_of_days"] ?? "";
+
+                                instructionController.text =
+                                    data["instructions"] ?? "";
+                              }
+                            },
                             text: 'Choose Template',
+
                             assetIcon: ImageAssets.drft,
                             textStyle: TextStyle(
                               fontSize: 12,
@@ -403,7 +511,7 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
   }
 
   Future<void> _saveAsTemplate() async {
-    final success = await getIt<TemplateCubit>().createTemplate(
+    final success = await context.read<TemplateCubit>().createTemplate(
       type: widget.showMedicineFields ? "Medicine" : "Lab Test",
 
       title: medicineNameController.text.trim(),
@@ -427,6 +535,10 @@ class _AddMedicineSheetState extends State<AddMedicineSheet> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("Template Saved")));
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Failed to save template")));
     }
   }
 }

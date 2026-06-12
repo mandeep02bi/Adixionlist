@@ -287,7 +287,7 @@ class _PatientListScreenState extends State<PatientListScreen> {
                                                   ),
                                                   gridItem(
                                                     "assets/images/Icons/Patient/Attach.png",
-                                                    "Attachment",
+                                                    "Consent",
                                                     const Attachment(),
                                                   ),
                                                   gridItem(

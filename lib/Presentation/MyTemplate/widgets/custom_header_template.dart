@@ -13,6 +13,7 @@ class CustomHeaderTemplate extends StatefulWidget {
   final Widget? bottomCard;
   final ValueChanged<int>? onTabChanged;
   final String? templateType;
+  final String? patientCode;
 
   const CustomHeaderTemplate({
     super.key,
@@ -20,8 +21,8 @@ class CustomHeaderTemplate extends StatefulWidget {
     this.bottomCard,
     this.onTabChanged,
     this.templateType,
+    this.patientCode,
   });
-
   @override
   State<CustomHeaderTemplate> createState() => _CustomHeaderTemplateState();
 }
@@ -36,6 +37,35 @@ class _CustomHeaderTemplateState extends State<CustomHeaderTemplate> {
     widget.onTabChanged?.call(index);
   }
 
+  void _onAddPressed() {
+    if (_selectedIndex == 0) {
+      showAddMedicineSheet(context);
+    } else if (_selectedIndex == 1) {
+      showAddMedicineSheet(
+        context,
+        formType: "lab",
+        title: 'Add Lab Test',
+        nameOf: 'Name of Lab Test',
+        name: 'Lab Test',
+        textButtom: 'Add lab Test',
+        iconButtom: ImageAssets.lab,
+        showMedicineFields: false,
+      );
+    } else if (_selectedIndex == 2) {
+      showAddMedicineSheet(
+        context,
+        formType: "consent",
+        patientCode: widget.patientCode,
+        title: 'Add Consent',
+        nameOf: 'Consent Title',
+        name: 'Consent',
+        textButtom: 'Add Consent',
+        iconButtom: ImageAssets.consent,
+        showMedicineFields: false,
+      );
+    }
+  }
+
   Widget _buildTabContent() {
     switch (_selectedIndex) {
       case 0:
@@ -44,38 +74,41 @@ class _CustomHeaderTemplateState extends State<CustomHeaderTemplate> {
         );
       case 1:
         return LabTemplate(templateType: widget.templateType ?? "Lab Test");
-      case 2:
-        return ConsentTemplate(templateType: widget.templateType ?? "Consent");
+      // case 2:
+      //   return ConsentTemplate(
+      //     templateType: widget.templateType ?? "Consent",
+      //     patientCode: widget.patientCode ?? "",
+      //   );
       default:
         return const SizedBox();
     }
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        Stack(
-          clipBehavior: Clip.none,
+        Column(
           children: [
-            SizedBox(
-              height: 152.h,
-              width: double.infinity,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.asset(
-                    ImageAssets.headerPrescription,
-                    fit: BoxFit.cover,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 30.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                SizedBox(
+                  height: 152.h,
+                  width: double.infinity,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.asset(
+                        ImageAssets.headerPrescription,
+                        fit: BoxFit.cover,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: Column(
                           children: [
+                            SizedBox(height: 30.h),
                             Row(
                               children: [
                                 GestureDetector(
@@ -97,142 +130,120 @@ class _CustomHeaderTemplateState extends State<CustomHeaderTemplate> {
                                 ),
                               ],
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                if (_selectedIndex == 0) {
-                                  showAddMedicineSheet(context);
-                                } else if (_selectedIndex == 1) {
-                                  showAddMedicineSheet(
-                                    context,
-                                    title: 'Add Lab Test',
-                                    nameOf: 'Name of Lab Test',
-                                    name: 'Lab Test',
-                                    textButtom: 'Add lab Test',
-                                    iconButtom: ImageAssets.lab,
-                                    showMedicineFields: false,
-                                  );
-                                } else if (_selectedIndex == 2) {
-                                  showAddMedicineSheet(
-                                    context,
-                                    title: 'Add Consent',
-                                    nameOf: 'Consent Title',
-                                    name: ' Consent',
-                                    textButtom: 'Consent',
-                                    iconButtom: ImageAssets.consent,
-                                    customButtom: const SizedBox.shrink(),
-                                    showMedicineFields: false,
-                                  );
-                                }
-                              },
-                              child: Image.asset(
-                                ImageAssets.addBottom,
-                                width: 35.w,
-                                height: 35.h,
+                            SizedBox(height: 20.h),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  CustomButton(
+                                    onPressed: () => _onTabTap(0),
+                                    text: 'Medicine',
+                                    textStyle: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: _isActive(0)
+                                          ? ColorApp.textColor
+                                          : Colors.white,
+                                    ),
+                                    buttonColor: _isActive(0)
+                                        ? ColorApp.scaffoldColor
+                                        : Colors.transparent,
+                                    border: _isActive(0)
+                                        ? null
+                                        : Border.all(
+                                            color: Colors.white,
+                                            width: 1.5.w,
+                                          ),
+                                    assetIcon: ImageAssets.drugs,
+                                    heighticon: 18.h,
+                                    widthicon: 18.w,
+                                    height: 45.h,
+                                    width: 123.w,
+                                  ),
+                                  SizedBox(width: 10.w),
+                                  CustomButton(
+                                    onPressed: () => _onTabTap(1),
+                                    text: 'Lab Test',
+                                    textStyle: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: _isActive(1)
+                                          ? ColorApp.textColor
+                                          : Colors.white,
+                                    ),
+                                    buttonColor: _isActive(1)
+                                        ? ColorApp.scaffoldColor
+                                        : Colors.transparent,
+                                    border: _isActive(1)
+                                        ? null
+                                        : Border.all(
+                                            color: Colors.white,
+                                            width: 1.5.w,
+                                          ),
+                                    assetIcon: ImageAssets.lab,
+                                    heighticon: 25.h,
+                                    widthicon: 23.w,
+                                    height: 45.h,
+                                    width: 123.w,
+                                  ),
+                                  SizedBox(width: 10.w),
+                                  CustomButton(
+                                    onPressed: () => _onTabTap(2),
+                                    text: 'Consent',
+                                    textStyle: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: _isActive(2)
+                                          ? ColorApp.textColor
+                                          : Colors.white,
+                                    ),
+                                    buttonColor: _isActive(2)
+                                        ? ColorApp.scaffoldColor
+                                        : Colors.transparent,
+                                    border: _isActive(2)
+                                        ? null
+                                        : Border.all(
+                                            color: Colors.white,
+                                            width: 1.5.w,
+                                          ),
+                                    assetIcon: ImageAssets.consent,
+                                    heighticon: 23.h,
+                                    widthicon: 23.w,
+                                    height: 45.h,
+                                    width: 123.w,
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 20.h),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              CustomButton(
-                                onPressed: () => _onTabTap(0),
-                                text: 'Medicine',
-                                textStyle: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: _isActive(0)
-                                      ? ColorApp.textColor
-                                      : Colors.white,
-                                ),
-                                buttonColor: _isActive(0)
-                                    ? ColorApp.scaffoldColor
-                                    : Colors.transparent,
-                                border: _isActive(0)
-                                    ? null
-                                    : Border.all(
-                                        color: Colors.white,
-                                        width: 1.5.w,
-                                      ),
-                                assetIcon: ImageAssets.drugs,
-                                heighticon: 18.h,
-                                widthicon: 18.w,
-                                height: 45.h,
-                                width: 123.w,
-                              ),
-                              SizedBox(width: 10.w),
-                              CustomButton(
-                                onPressed: () => _onTabTap(1),
-                                text: 'Lab Test',
-                                textStyle: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: _isActive(1)
-                                      ? ColorApp.textColor
-                                      : Colors.white,
-                                ),
-                                buttonColor: _isActive(1)
-                                    ? ColorApp.scaffoldColor
-                                    : Colors.transparent,
-                                border: _isActive(1)
-                                    ? null
-                                    : Border.all(
-                                        color: Colors.white,
-                                        width: 1.5.w,
-                                      ),
-                                assetIcon: ImageAssets.lab,
-                                heighticon: 25.h,
-                                widthicon: 23.w,
-                                height: 45.h,
-                                width: 123.w,
-                              ),
-                              SizedBox(width: 10.w),
-                              CustomButton(
-                                onPressed: () => _onTabTap(2),
-                                text: 'Consent',
-                                textStyle: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: _isActive(2)
-                                      ? ColorApp.textColor
-                                      : Colors.white,
-                                ),
-                                buttonColor: _isActive(2)
-                                    ? ColorApp.scaffoldColor
-                                    : Colors.transparent,
-                                border: _isActive(2)
-                                    ? null
-                                    : Border.all(
-                                        color: Colors.white,
-                                        width: 1.5.w,
-                                      ),
-                                assetIcon: ImageAssets.consent,
-                                heighticon: 23.h,
-                                widthicon: 23.w,
-                                height: 45.h,
-                                width: 123.w,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                if (widget.bottomCard != null)
+                  Positioned(
+                    bottom: -50.h,
+                    left: 16.w,
+                    right: 16.w,
+                    child: widget.bottomCard!,
+                  ),
+              ],
             ),
-            if (widget.bottomCard != null)
-              Positioned(
-                bottom: -50.h,
-                left: 16.w,
-                right: 16.w,
-                child: widget.bottomCard!,
-              ),
+
+            Expanded(child: _buildTabContent()),
           ],
         ),
-        Expanded(child: _buildTabContent()),
+
+        Positioned(
+          bottom: 20.h,
+          right: 20.w,
+          child: FloatingActionButton(
+            backgroundColor: const Color(0xFF24937D),
+            onPressed: _onAddPressed,
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
+        ),
       ],
     );
   }
