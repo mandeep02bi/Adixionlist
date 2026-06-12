@@ -35,13 +35,26 @@ class DioFactory {
             ApiConst.resetPasswordEndpoint,
           ];
 
-          // Check if request is not for a public endpoint
-          if (!publicEndpoints.any((endpoint) => options.path.contains(endpoint))) {
-            final token = await getIt<TokenStorageService>().getAccessToken();
+          final token = await getIt<TokenStorageService>().getAccessToken();
+
+          print("========== DIO REQUEST ==========");
+          print("TOKEN => $token");
+          print("URL => ${options.uri}");
+          print("METHOD => ${options.method}");
+          print("DATA => ${options.data}");
+          print("HEADERS BEFORE => ${options.headers}");
+
+          if (!publicEndpoints.any(
+            (endpoint) => options.path.contains(endpoint),
+          )) {
             if (token != null && token.isNotEmpty) {
               options.headers['Authorization'] = 'Bearer $token';
             }
           }
+
+          print("HEADERS AFTER => ${options.headers}");
+          print("================================");
+
           return handler.next(options);
         },
         onError: (DioException e, handler) async {

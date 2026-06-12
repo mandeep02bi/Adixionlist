@@ -34,6 +34,21 @@ class _PatientListScreenState extends State<PatientListScreen> {
     return BlocProvider<PatientListCubit>(
       create: (context) => getIt<PatientListCubit>()..getPatients(),
       child: Scaffold(
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: const Color(0xFF24937D),
+          onPressed: () async {
+            final result = await Get.to(() => const AddPatientScreen());
+
+            if (result == true) {
+              if (context.mounted) {
+                context.read<PatientListCubit>().getPatients();
+              }
+            }
+          },
+          child: const Icon(Icons.add, color: Colors.white),
+        ),
         body: Stack(
           children: [
             /// Background Gradient
@@ -55,15 +70,21 @@ class _PatientListScreenState extends State<PatientListScreen> {
                           children: [
                             Image.asset(
                               "assets/images/Header/header.png",
-                              height: orientation == Orientation.portrait ? 110.h : 70.h,
+                              height: orientation == Orientation.portrait
+                                  ? 110.h
+                                  : 70.h,
                               width: double.infinity,
                               fit: BoxFit.fill,
                             ),
                             Positioned(
-                              top: orientation == Orientation.portrait ? 40.h : 25.h,
+                              top: orientation == Orientation.portrait
+                                  ? 40.h
+                                  : 25.h,
                               left: 15.w,
                               child: CircleAvatar(
-                                radius: orientation == Orientation.portrait ? 22.r : 18.r,
+                                radius: orientation == Orientation.portrait
+                                    ? 22.r
+                                    : 18.r,
                                 backgroundColor: Colors.white24,
                                 child: IconButton(
                                   padding: EdgeInsets.zero,
@@ -73,45 +94,30 @@ class _PatientListScreenState extends State<PatientListScreen> {
                                   },
                                   icon: Image.asset(
                                     "assets/images/Icons/Patient/Frame.png",
-                                    height: orientation == Orientation.portrait ? 22.h : 18.h,
-                                    width: orientation == Orientation.portrait ? 22.w : 18.w,
+                                    height: orientation == Orientation.portrait
+                                        ? 22.h
+                                        : 18.h,
+                                    width: orientation == Orientation.portrait
+                                        ? 22.w
+                                        : 18.w,
                                     fit: BoxFit.contain,
                                   ),
                                 ),
                               ),
                             ),
                             Positioned(
-                              top: orientation == Orientation.portrait ? 45.h : 30.h,
+                              top: orientation == Orientation.portrait
+                                  ? 45.h
+                                  : 30.h,
                               left: 80.w,
                               child: Text(
                                 "List of Patient",
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: orientation == Orientation.portrait ? 20.sp : 16.sp,
+                                  fontSize: orientation == Orientation.portrait
+                                      ? 20.sp
+                                      : 16.sp,
                                   fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: orientation == Orientation.portrait ? 40.h : 25.h,
-                              right: 20.w,
-                              child: CircleAvatar(
-                                radius: orientation == Orientation.portrait ? 22.r : 18.r,
-                                backgroundColor: Colors.white24,
-                                child: IconButton(
-                                  onPressed: () async {
-                                    final result = await Get.to(() => const AddPatientScreen());
-                                    if (result == true) {
-                                      if (context.mounted) {
-                                        context.read<PatientListCubit>().getPatients();
-                                      }
-                                    }
-                                  },
-                                  icon: Image.asset(
-                                    "assets/images/Icons/Patient/Add.png",
-                                    height: orientation == Orientation.portrait ? 80.h : 50.h,
-                                    width: orientation == Orientation.portrait ? 80.w : 50.w,
-                                  ),
                                 ),
                               ),
                             ),
@@ -127,15 +133,22 @@ class _PatientListScreenState extends State<PatientListScreen> {
                       child: BlocBuilder<PatientListCubit, PatientListState>(
                         builder: (context, state) {
                           return state.maybeWhen(
-                            loading: () => const Center(child: CircularProgressIndicator()),
+                            loading: () => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
                             error: (errorMsg) => Center(
                               child: Text(
                                 errorMsg,
-                                style: TextStyle(fontSize: 14.sp, color: Colors.red),
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: Colors.red,
+                                ),
                               ),
                             ),
                             success: (responseData) {
-                              final list = (responseData as PatientsListResponse).data ?? [];
+                              final list =
+                                  (responseData as PatientsListResponse).data ??
+                                  [];
 
                               if (list.isEmpty) {
                                 return Center(
@@ -153,8 +166,10 @@ class _PatientListScreenState extends State<PatientListScreen> {
 
                                   // Extract Initials
                                   String initials = "PT";
-                                  if (item.firstName.isNotEmpty && item.lastName.isNotEmpty) {
-                                    initials = "${item.firstName[0].toUpperCase()}${item.lastName[0].toUpperCase()}";
+                                  if (item.firstName.isNotEmpty &&
+                                      item.lastName.isNotEmpty) {
+                                    initials =
+                                        "${item.firstName[0].toUpperCase()}${item.lastName[0].toUpperCase()}";
                                   }
 
                                   return Column(
@@ -162,7 +177,10 @@ class _PatientListScreenState extends State<PatientListScreen> {
                                       GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            expandedIndex = expandedIndex == index ? -1 : index;
+                                            expandedIndex =
+                                                expandedIndex == index
+                                                ? -1
+                                                : index;
                                           });
                                         },
                                         child: Container(
@@ -173,14 +191,17 @@ class _PatientListScreenState extends State<PatientListScreen> {
                                           padding: EdgeInsets.all(12.w),
                                           decoration: BoxDecoration(
                                             color: Colors.white70,
-                                            borderRadius: BorderRadius.circular(15.r),
+                                            borderRadius: BorderRadius.circular(
+                                              15.r,
+                                            ),
                                           ),
                                           child: Row(
                                             children: [
                                               /// Avatar
                                               CircleAvatar(
                                                 radius: 22.r,
-                                                backgroundColor: Colors.blueGrey,
+                                                backgroundColor:
+                                                    Colors.blueGrey,
                                                 child: Text(
                                                   initials,
                                                   style: TextStyle(
@@ -196,12 +217,14 @@ class _PatientListScreenState extends State<PatientListScreen> {
                                               /// Name
                                               Expanded(
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
                                                       item.fullName,
                                                       style: TextStyle(
-                                                        fontWeight: FontWeight.bold,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                         fontSize: 14.sp,
                                                       ),
                                                     ),
@@ -230,28 +253,43 @@ class _PatientListScreenState extends State<PatientListScreen> {
                                       /// Dropdown Grid
                                       if (expandedIndex == index)
                                         Container(
-                                          margin: EdgeInsets.symmetric(horizontal: 12.w),
+                                          margin: EdgeInsets.symmetric(
+                                            horizontal: 12.w,
+                                          ),
                                           padding: EdgeInsets.all(5.w),
                                           decoration: BoxDecoration(
                                             color: Colors.white70,
-                                            borderRadius: BorderRadius.circular(15.r),
+                                            borderRadius: BorderRadius.circular(
+                                              15.r,
+                                            ),
                                           ),
                                           child: OrientationBuilder(
                                             builder: (context, orientation) {
                                               return GridView.count(
                                                 shrinkWrap: true,
-                                                physics: const NeverScrollableScrollPhysics(),
-                                                crossAxisCount: orientation == Orientation.portrait ? 3 : 5,
-                                                childAspectRatio: orientation == Orientation.portrait ? 1.3 : 1.5,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                crossAxisCount:
+                                                    orientation ==
+                                                        Orientation.portrait
+                                                    ? 3
+                                                    : 5,
+                                                childAspectRatio:
+                                                    orientation ==
+                                                        Orientation.portrait
+                                                    ? 1.3
+                                                    : 1.5,
                                                 children: [
                                                   gridItem(
                                                     "assets/images/Icons/Patient/p.png",
                                                     "Prescribe",
-                                                    Prescriptionlist(patient: item),
+                                                    Prescriptionlist(
+                                                      patient: item,
+                                                    ),
                                                   ),
                                                   gridItem(
                                                     "assets/images/Icons/Patient/Attach.png",
-                                                    "Attachment",
+                                                    "Consent",
                                                     const Attachment(),
                                                   ),
                                                   gridItem(

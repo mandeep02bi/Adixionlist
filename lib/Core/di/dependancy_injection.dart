@@ -12,6 +12,9 @@ import 'package:doctor/Presentation/AuthScreen/data/repo/forgot_password_repo.da
 import 'package:doctor/Presentation/AuthScreen/logic/forgot_password/forgot_password_cubit.dart';
 import 'package:doctor/Presentation/AuthScreen/logic/login/login_cubit.dart';
 import 'package:doctor/Presentation/AuthScreen/logic/register/register_cubit.dart';
+import 'package:doctor/Presentation/Consent/data/api/consent_api_service.dart';
+import 'package:doctor/Presentation/Consent/data/repository/consent_repo.dart';
+import 'package:doctor/Presentation/Consent/cubit/consent_cubit.dart';
 import 'package:doctor/Presentation/MyTemplate/Data/api/template_service.dart';
 import 'package:doctor/Presentation/MyTemplate/Data/repository/template_repository.dart';
 
@@ -192,4 +195,16 @@ Future<void> setupGetIt() async {
   getIt.registerFactory<TemplateCubit>(
     () => TemplateCubit(templateRepo: getIt()),
   );
+
+  /// CONSENT
+
+  // getIt.registerLazySingleton<ConsentApiService>(() => ConsentApiService(dio));
+
+  // getIt.registerLazySingleton<ConsentRepository>(
+  //   () => ConsentRepository(consentApiService: getIt()),
+  // );
+
+  // getIt.registerFactory<ConsentCubit>(
+  //   () => ConsentCubit(consentRepository: getIt()),
+  // );
 }

@@ -30,6 +30,8 @@
 //   const PrescriptionError(this.message);
 // }
 
+import 'package:doctor/Data/model/prescription_response.dart';
+
 abstract class PrescriptionState {}
 
 class PrescriptionInitial extends PrescriptionState {}
@@ -43,7 +45,7 @@ class PrescriptionProgress extends PrescriptionState {
 }
 
 class PrescriptionSuccess extends PrescriptionState {
-  final dynamic detail;
+  final PrescriptionDetail detail;
 
   PrescriptionSuccess(this.detail);
 }

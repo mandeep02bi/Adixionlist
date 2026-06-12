@@ -33,6 +33,10 @@ class MedicineTemplate extends StatelessWidget {
                 child: PatineWidgetsTemplate(
                   name: template.title,
                   onView: () {
+                    print("================================");
+                    print(template.content);
+                    print("================================");
+
                     Navigator.pop(context, template.content);
                   },
                 ),
