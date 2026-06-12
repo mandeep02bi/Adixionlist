@@ -7,12 +7,18 @@ import 'package:doctor/Presentation/Patient/data/repo/patient_repo.dart';
 import 'package:doctor/Presentation/Records/data/models/records_response.dart';
 import 'package:doctor/Presentation/Records/logic/records_cubit.dart';
 import 'package:doctor/Presentation/Records/logic/records_state.dart';
+import 'package:doctor/Presentation/Records/prescription_record_pdf_screen.dart';
 import 'package:doctor/Presentation/Records/widgets/container_body.dart';
 import 'package:doctor/Presentation/Records/widgets/custom_header_recordes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:intl/intl.dart';
+import 'package:doctor/Presentation/Certificate/CertificatePdfScreen.dart';
+
+import 'instruction_detail_screen.dart' show InstructionDetailsScreen;
 
 class Records extends StatefulWidget {
   final PatientModel? patient;
@@ -223,12 +229,23 @@ class _RecordsState extends State<Records> {
         itemCount: list.length,
         itemBuilder: (context, index) {
           final item = list[index];
-          return _buildRecordCard(
-            title: item.diagnosis ?? "No Diagnosis",
-            subtitle: item.chiefComplaint ?? "No Complaints",
-            date: item.prescriptionDate ?? "",
-            tag: item.doctorName != null ? "Dr. ${item.doctorName}" : "Prescription",
-            tagColor: const Color(0xFF7B3FCF),
+          return InkWell(
+            onTap: () {
+              Get.to(
+                    () => PrescriptionRecordPdfScreen(
+                  prescription: item,
+                  patient: selectedPatient!,
+                ),
+              );
+            },
+            borderRadius: BorderRadius.circular(12.r),
+            child: _buildRecordCard(
+              title: item.diagnosis ?? "No Diagnosis",
+              subtitle: item.chiefComplaint ?? "No Complaints",
+              date: item.prescriptionDate ?? "",
+              tag: item.doctorName != null ? "Dr. ${item.doctorName}" : "Prescription",
+              tagColor: const Color(0xFF7B3FCF),
+            ),
           );
         },
       );
@@ -240,12 +257,26 @@ class _RecordsState extends State<Records> {
         itemCount: list.length,
         itemBuilder: (context, index) {
           final item = list[index];
-          return _buildRecordCard(
-            title: item.title,
-            subtitle: "Medical Certificate",
-            date: item.certificateDate,
-            tag: item.doctorName != null ? "Dr. ${item.doctorName}" : "Certificate",
-            tagColor: const Color(0xFF4CAF50),
+          return  InkWell(
+            onTap: () {
+              Get.to(
+                    () => CertificatePdfScreen(
+                  patientName: selectedPatient?.fullName ?? "",
+                  title: item.title,
+                  description: item.description??"",
+                  doctorName: item.doctorName ?? "",
+                ),
+              );
+            },
+            child: _buildRecordCard(
+              title: item.title,
+              subtitle: "Medical Certificate",
+              date: item.certificateDate,
+              tag: item.doctorName != null
+                  ? "Dr. ${item.doctorName}"
+                  : "Certificate",
+              tagColor: const Color(0xFF4CAF50),
+            ),
           );
         },
       );
@@ -257,12 +288,27 @@ class _RecordsState extends State<Records> {
         itemCount: list.length,
         itemBuilder: (context, index) {
           final item = list[index];
-          return _buildRecordCard(
-            title: item.title,
-            subtitle: "Care Instructions",
-            date: item.instructionDate,
-            tag: item.doctorName != null ? "Dr. ${item.doctorName}" : "Instruction",
-            tagColor: const Color(0xFFFF9800),
+          return InkWell(
+            onTap: () {
+              Get.to(
+                    () => InstructionDetailsScreen(
+                  id: item.id,
+                      title: item.title,
+                      description: item.description??"",
+                      doctorName: item.doctorName??" ",
+                      date: item.instructionDate,
+                ),
+              );
+            },
+            child: _buildRecordCard(
+              title: item.title,
+              subtitle: "Care Instructions",
+              date: item.instructionDate,
+              tag: item.doctorName != null
+                  ? "Dr. ${item.doctorName}"
+                  : "Instruction",
+              tagColor: const Color(0xFFFF9800),
+            ),
           );
         },
       );

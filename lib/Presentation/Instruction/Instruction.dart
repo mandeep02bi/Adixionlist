@@ -134,6 +134,8 @@ class _InstructionState extends State<Instruction> {
                               borderRadius: BorderRadius.circular(14.r),
                             ),
                             child: ExpansionTile(
+                              shape: const Border(),
+                              collapsedShape: const Border(),
                               trailing: PopupMenuButton<String>(
                                 itemBuilder: (_) => const [
                                   PopupMenuItem(
@@ -145,8 +147,64 @@ class _InstructionState extends State<Instruction> {
                                     child: Text("Delete"),
                                   ),
                                 ],
-                                onSelected: (value) {
-                                  // edit or delete
+                                onSelected: (value) async{
+
+                                  //edit
+                                  if (value == "edit") {
+                                    final result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => AddInstruction(
+                                          patient: widget.patient,
+                                          instruction: item,
+                                          isEdit: true,
+                                        ),
+                                      ),
+                                    );
+
+                                    if (result == true && context.mounted) {
+                                      context.read<InstructionCubit>().getInstructions(
+                                        widget.patient.patientCode,
+                                      );
+                                    }
+                                  }
+
+
+                                  // delete
+
+                                  if (value == "delete") {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                        title: const Text("Delete"),
+                                        content: const Text(
+                                          "Are you sure you want to delete this instruction?",
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context),
+                                            child: const Text("Cancel"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              Get.snackbar(
+                                                "Success",
+                                                "Instruction deleted successfully!",
+                                                backgroundColor: Colors.red,
+                                                colorText: Colors.white,
+                                              );
+                                              context.read<InstructionCubit>().deleteInstruction(
+                                                item.id!,
+                                                widget.patient.patientCode!,
+                                              );
+                                            },
+                                            child:  Text("Delete",style: TextStyle(color: Colors.red),),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
                                 },
                               ),
                               title: Text(

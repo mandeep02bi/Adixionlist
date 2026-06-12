@@ -83,6 +83,7 @@ RecordCertificate _$RecordCertificateFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       certificateDate: json['certificate_date'] as String,
       doctorName: json['doctor_name'] as String?,
+      description: json['description'] as String?,
     );
 
 Map<String, dynamic> _$RecordCertificateToJson(RecordCertificate instance) =>
@@ -91,6 +92,7 @@ Map<String, dynamic> _$RecordCertificateToJson(RecordCertificate instance) =>
       'title': instance.title,
       'certificate_date': instance.certificateDate,
       'doctor_name': instance.doctorName,
+      'description': instance.description,
     };
 
 RecordInstruction _$RecordInstructionFromJson(Map<String, dynamic> json) =>
@@ -99,6 +101,7 @@ RecordInstruction _$RecordInstructionFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       instructionDate: json['instruction_date'] as String,
       doctorName: json['doctor_name'] as String?,
+      description: json['description'] as String?,
     );
 
 Map<String, dynamic> _$RecordInstructionToJson(RecordInstruction instance) =>
@@ -107,6 +110,7 @@ Map<String, dynamic> _$RecordInstructionToJson(RecordInstruction instance) =>
       'title': instance.title,
       'instruction_date': instance.instructionDate,
       'doctor_name': instance.doctorName,
+      'description': instance.description,
     };
 
 RecordConsent _$RecordConsentFromJson(Map<String, dynamic> json) =>

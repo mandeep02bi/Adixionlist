@@ -1,4 +1,5 @@
 import 'package:doctor/Core/di/dependancy_injection.dart';
+import 'package:doctor/Presentation/Instruction/data/models/instruction_response.dart';
 import 'package:doctor/Presentation/Patient/data/models/patient_model.dart';
 import 'package:doctor/Presentation/Instruction/data/models/instruction_request_body.dart';
 import 'package:doctor/Presentation/Instruction/logic/instruction_cubit.dart';
@@ -11,8 +12,10 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class AddInstruction extends StatefulWidget {
+  final InstructionModel? instruction;
+  final bool isEdit;
   final PatientModel patient;
-  const AddInstruction({super.key, required this.patient});
+  const AddInstruction({super.key, required this.patient, this.instruction, this.isEdit = false});
 
   @override
   State<AddInstruction> createState() => _AddInstructionState();
@@ -21,6 +24,21 @@ class AddInstruction extends StatefulWidget {
 class _AddInstructionState extends State<AddInstruction> {
   final titleController = TextEditingController();
   final descController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.isEdit &&
+        widget.instruction != null) {
+
+      titleController.text =
+          widget.instruction!.title ?? '';
+
+      descController.text =
+          widget.instruction!.description ?? '';
+    }
+  }
 
   void saveInstruction(BuildContext context) {
     final title = titleController.text.trim();
@@ -43,7 +61,14 @@ class _AddInstructionState extends State<AddInstruction> {
       instructionDate: DateFormat('yyyy-MM-dd').format(DateTime.now()),
     );
 
-    BlocProvider.of<InstructionCubit>(context).createInstruction(body);
+    if (widget.isEdit) {
+      context.read<InstructionCubit>().updateInstruction(
+        widget.instruction!.id!,
+        body,
+      );
+    } else {
+      context.read<InstructionCubit>().createInstruction(body);
+    }
   }
 
   @override
@@ -61,12 +86,15 @@ class _AddInstructionState extends State<AddInstruction> {
           builder: (context) {
             return BlocListener<InstructionCubit, InstructionState>(
               listener: (context, state) {
+                print("STATE = $state");
                 state.maybeWhen(
                   success: (data) {
-                    Get.closeAllSnackbars();
+                    print("SUCCESS CALLED");
                     Get.snackbar(
                       "Success",
-                      "Care instruction created successfully!",
+                      widget.isEdit
+                          ? "Instruction updated successfully!"
+                          : "Care instruction created successfully!",
                       backgroundColor: Colors.green,
                       colorText: Colors.white,
                     );
@@ -91,7 +119,9 @@ class _AddInstructionState extends State<AddInstruction> {
                     children: [
                       /// HEADER
                       AppHeader(
-                        title: "Care Instruction",
+                        title:  widget.isEdit
+                            ? "Update Instruction"
+                            : "Care Instruction",
                         onBack: () => Navigator.pop(context),
                       ),
 
@@ -191,7 +221,9 @@ class _AddInstructionState extends State<AddInstruction> {
                                   ),
                                   onPressed: () => saveInstruction(context),
                                   child: Text(
-                                    "Save",
+                                    widget.isEdit
+                                        ? "Update"
+                                        : "Save",
                                     style: TextStyle(
                                       fontSize: 14.sp,
                                       color: Colors.white,
