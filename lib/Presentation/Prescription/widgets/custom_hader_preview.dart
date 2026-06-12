@@ -1,6 +1,7 @@
 import 'package:doctor/Core/widgets/header_cricles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
 class CustomHaderPreview extends StatelessWidget {
   final String title;
@@ -147,8 +148,9 @@ class CustomHaderPreview extends StatelessWidget {
                                   SizedBox(width: 6.w),
 
                                   Text(
-                                    '12 Mar 2026',
-
+                                    DateFormat(
+                                      'dd MMM yyyy',
+                                    ).format(DateTime.now()),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 10.sp,

@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class PrescriptionPdfService {
   /// Generates Prescription PDF
@@ -22,8 +23,8 @@ class PrescriptionPdfService {
     final pdf = pw.Document();
 
     /// Fonts
-    final regularFont = pw.Font.helvetica();
-    final boldFont = pw.Font.helveticaBold();
+    final regularFont = await PdfGoogleFonts.notoSansRegular();
+    final boldFont = await PdfGoogleFonts.notoSansBold();
 
     /// Colors
     const headerBg = PdfColor.fromInt(0xFF4FA3A5);
@@ -65,7 +66,7 @@ class PrescriptionPdfService {
             pw.SizedBox(width: 120, child: pw.Text('$label:', style: gray())),
             pw.Expanded(
               child: pw.Text(
-                value != null && value.isNotEmpty ? value : '—',
+                value != null && value.isNotEmpty ? value : '-',
                 style: body(),
               ),
             ),
@@ -148,7 +149,7 @@ class PrescriptionPdfService {
                               .where(
                                 (e) => e != null && e.toString().isNotEmpty,
                               )
-                              .join('  •  '),
+                              .join(' | '),
                           style: gray(),
                         ),
                       ],
@@ -273,11 +274,11 @@ class PrescriptionPdfService {
                       children: [
                         _tableCell(m.name, regularFont),
 
-                        _tableCell(m.frequency ?? '—', regularFont),
+                        _tableCell(m.frequency ?? '-', regularFont),
 
-                        _tableCell(m.noOfDays ?? '—', regularFont),
+                        _tableCell(m.noOfDays ?? '-', regularFont),
 
-                        _tableCell(m.totalQuantity ?? '—', regularFont),
+                        _tableCell(m.totalQuantity ?? '-', regularFont),
                       ],
                     );
                   }),
@@ -310,7 +311,7 @@ class PrescriptionPdfService {
                       children: [
                         _tableCell(lab.testName, regularFont),
 
-                        _tableCell(lab.additionalComments ?? '—', regularFont),
+                        _tableCell(lab.additionalComments ?? '-', regularFont),
                       ],
                     );
                   }),
@@ -428,7 +429,7 @@ class PrescriptionPdfService {
       padding: const pw.EdgeInsets.all(5),
 
       child: pw.Text(
-        (text == null || text.toString().isEmpty) ? '—' : text.toString(),
+        (text == null || text.toString().isEmpty) ? '-' : text.toString(),
         style: pw.TextStyle(
           font: regular,
           fontSize: 8,

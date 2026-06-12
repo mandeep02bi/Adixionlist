@@ -43,7 +43,7 @@ class ApiConst {
   // =========================
   // CONSENT APIs
   // =========================
-  static const String consents = '/consents';
+  static const String consentEndpoint = "/consents";
 
   // =========================
   // TEMPLATE APIs

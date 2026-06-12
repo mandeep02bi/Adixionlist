@@ -23,15 +23,15 @@ class MedicineDatabase {
 
     return await openDatabase(
       path,
-      version: 4,
+      version: 5,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
   }
 
-Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
-  if (oldVersion < 2) {
-    await db.execute('''
+  Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('''
       CREATE TABLE IF NOT EXISTS certificate(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT,
@@ -39,9 +39,9 @@ Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
         date TEXT
       )
     ''');
-  }
-  if (oldVersion < 3) {
-    await db.execute('''
+    }
+    if (oldVersion < 3) {
+      await db.execute('''
       CREATE TABLE IF NOT EXISTS invoice(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         patient_id TEXT,
@@ -55,33 +55,52 @@ Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
         date TEXT
       )
     ''');
-  }
-  if (oldVersion < 4) {
-    try {
-      final columns = await db.rawQuery('PRAGMA table_info(medicines)');
-      final hasType = columns.any((col) => col['name'] == 'type');
-      if (!hasType) {
-        await db.execute(
-          'ALTER TABLE medicines ADD COLUMN type TEXT DEFAULT "medicine"',
-        );
+    }
+    if (oldVersion < 4) {
+      try {
+        final columns = await db.rawQuery('PRAGMA table_info(medicines)');
+        final hasType = columns.any((col) => col['name'] == 'type');
+        if (!hasType) {
+          await db.execute(
+            'ALTER TABLE medicines ADD COLUMN type TEXT DEFAULT "medicine"',
+          );
+        }
+      } catch (e) {
+        debugPrint('DB upgrade error: $e');
       }
-    } catch (e) {
-      debugPrint('DB upgrade error: $e');
+    }
+    if (oldVersion < 5) {
+      try {
+        final columns = await db.rawQuery('PRAGMA table_info(medicines)');
+
+        final hasComments = columns.any(
+          (col) => col['name'] == 'additional_comments',
+        );
+
+        if (!hasComments) {
+          await db.execute(
+            'ALTER TABLE medicines ADD COLUMN additional_comments TEXT',
+          );
+        }
+      } catch (e) {
+        debugPrint('DB upgrade error: $e');
+      }
     }
   }
-}
+
   Future _createDB(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS medicines (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        medicine_name TEXT NOT NULL,
-        qty TEXT NOT NULL,
-        frequency TEXT NOT NULL,
-        route_form TEXT NOT NULL,
-        no_of_days TEXT NOT NULL,
-        instruction TEXT NOT NULL,
-        type TEXT DEFAULT "medicine" 
-      )
+  CREATE TABLE IF NOT EXISTS medicines (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  medicine_name TEXT NOT NULL,
+  qty TEXT NOT NULL,
+  frequency TEXT NOT NULL,
+  route_form TEXT NOT NULL,
+  no_of_days TEXT NOT NULL,
+  instruction TEXT NOT NULL,
+  type TEXT DEFAULT "medicine",
+  additional_comments TEXT
+)
     ''');
     await db.execute('''
       CREATE TABLE IF NOT EXISTS certificate(
@@ -117,7 +136,7 @@ Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
     final db = await instance.database;
     final result = await db.query(
       'medicines',
-      where: 'type = ? OR type IS NULL', 
+      where: 'type = ? OR type IS NULL',
       whereArgs: ['medicine'],
       orderBy: 'id DESC',
     );
@@ -145,7 +164,11 @@ Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
   // Clear All Medicines Drafts
   Future<int> clearAllMedicines() async {
     final db = await instance.database;
-    return await db.delete('medicines', where: 'type = ? OR type IS NULL', whereArgs: ['medicine']);
+    return await db.delete(
+      'medicines',
+      where: 'type = ? OR type IS NULL',
+      whereArgs: ['medicine'],
+    );
   }
 
   // Clear All Lab Tests Drafts

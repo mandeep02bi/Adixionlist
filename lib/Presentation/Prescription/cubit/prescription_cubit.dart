@@ -78,6 +78,7 @@
 // }
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:doctor/Data/model/lab_test_request_body.dart';
 import 'package:doctor/Data/model/medicine_request_body.dart';
 import 'package:doctor/Data/model/prescription_request_body.dart';
@@ -127,12 +128,24 @@ class PrescriptionCubit extends Cubit<PrescriptionState> {
       }
 
       /// FETCH FINAL DETAIL
+      final response = await prescriptionRepo.getPrescriptionById(
+        prescriptionId,
+      );
 
-      final detail = await prescriptionRepo.getPrescriptionById(prescriptionId);
+      if (response.data == null) {
+        throw Exception("Prescription detail not found");
+      }
 
-      emit(PrescriptionSuccess(detail));
+      emit(PrescriptionSuccess(response.data!));
     } catch (e) {
-      emit(PrescriptionError(e.toString()));
+      String message = "Something went wrong";
+
+      if (e is DioException) {
+        message =
+            e.response?.data?['message'] ?? e.message ?? "Something went wrong";
+      }
+
+      emit(PrescriptionError(message));
     }
   }
 }
