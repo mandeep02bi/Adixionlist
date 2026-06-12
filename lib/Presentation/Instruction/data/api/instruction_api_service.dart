@@ -20,4 +20,15 @@ abstract class InstructionApiService {
     @Query('patient_code') String? patientCode,
     @Query('sort') String? sort,
   );
+
+  @PUT("${ApiConst.instructions}/{id}")
+  Future<InstructionResponse> updateInstruction(
+      @Path("id") int id,
+      @Body() InstructionRequestBody body,
+      );
+
+  @DELETE("${ApiConst.instructions}/{id}")
+  Future<InstructionResponse> deleteInstruction(
+      @Path("id") int id,
+      );
 }

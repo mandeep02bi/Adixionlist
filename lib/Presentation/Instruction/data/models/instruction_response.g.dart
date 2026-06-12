@@ -9,9 +9,9 @@ part of 'instruction_response.dart';
 InstructionModel _$InstructionModelFromJson(Map<String, dynamic> json) =>
     InstructionModel(
       id: (json['id'] as num).toInt(),
-      title: json['title'] as String,
-      description: json['description'] as String,
-      instructionDate: json['instruction_date'] as String,
+      title: json['title'] as String?,
+      description: json['description'] as String?,
+      instructionDate: json['instruction_date'] as String?,
       patientName: json['patient_name'] as String?,
       patientCode: json['patient_code'] as String?,
       doctorName: json['doctor_name'] as String?,

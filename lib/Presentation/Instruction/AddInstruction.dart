@@ -43,7 +43,7 @@ class _AddInstructionState extends State<AddInstruction> {
       instructionDate: DateFormat('yyyy-MM-dd').format(DateTime.now()),
     );
 
-    context.read<InstructionCubit>().createInstruction(body);
+    BlocProvider.of<InstructionCubit>(context).createInstruction(body);
   }
 
   @override
@@ -63,6 +63,7 @@ class _AddInstructionState extends State<AddInstruction> {
               listener: (context, state) {
                 state.maybeWhen(
                   success: (data) {
+                    Get.closeAllSnackbars();
                     Get.snackbar(
                       "Success",
                       "Care instruction created successfully!",
@@ -72,12 +73,14 @@ class _AddInstructionState extends State<AddInstruction> {
                     Navigator.pop(context, true);
                   },
                   error: (error) {
-                    Get.snackbar(
-                      "Error Creating",
-                      error,
-                      backgroundColor: Colors.red,
-                      colorText: Colors.white,
-                    );
+                    if (error.isNotEmpty) {
+                      Get.snackbar(
+                        "Error Creating",
+                        error,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                    }
                   },
                   orElse: () {},
                 );

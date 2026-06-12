@@ -5,10 +5,10 @@ part 'instruction_response.g.dart';
 @JsonSerializable()
 class InstructionModel {
   final int id;
-  final String title;
-  final String description;
+  final String ?title;
+  final String ?description;
   @JsonKey(name: 'instruction_date')
-  final String instructionDate;
+  final String? instructionDate;
   @JsonKey(name: 'patient_name')
   final String? patientName;
   @JsonKey(name: 'patient_code')
