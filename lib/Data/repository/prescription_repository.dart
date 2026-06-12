@@ -46,6 +46,7 @@
 // }
 
 import 'package:doctor/Data/Api/prescription_api_service.dart';
+import 'package:doctor/Data/model/prescription_response.dart';
 
 import '../../../../Data/model/lab_test_request_body.dart';
 import '../../../../Data/model/medicine_request_body.dart';
@@ -83,8 +84,7 @@ class PrescriptionRepo {
   /// ============================
   /// GET PRESCRIPTION DETAIL
   /// ============================
-
-  Future getPrescriptionById(int id) async {
+  Future<PrescriptionDetailResponse> getPrescriptionById(int id) async {
     return await prescriptionApiService.getPrescriptionById(id);
   }
 }

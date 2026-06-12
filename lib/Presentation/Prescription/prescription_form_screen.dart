@@ -79,7 +79,13 @@ class _PrescriptionFormScreenState extends State<PrescriptionFormScreen> {
         builder: (context) {
           return BlocListener<PrescriptionCubit, PrescriptionState>(
             listener: (context, state) async {
+              print("=================================");
+              print("PRESCRIPTION STATE => $state");
+              print("=================================");
+
               if (state is PrescriptionLoading) {
+                print("PRESCRIPTION LOADING");
+
                 showDialog(
                   context: context,
                   barrierDismissible: false,
@@ -89,7 +95,8 @@ class _PrescriptionFormScreenState extends State<PrescriptionFormScreen> {
                   },
                 );
               } else if (state is PrescriptionSuccess) {
-                /// CLOSE ONLY LOADER
+                print("PRESCRIPTION SUCCESS");
+
                 Navigator.of(context, rootNavigator: true).pop();
 
                 final body = PrescriptionRequestBody(
@@ -115,6 +122,8 @@ class _PrescriptionFormScreenState extends State<PrescriptionFormScreen> {
                   prescriptionDate: DateTime.now().toString(),
                 );
 
+                print("PATIENT CODE => ${widget.patient.patientCode}");
+
                 final file = await PrescriptionPdfService.generate(
                   patient: widget.patient,
                   prescription: body,
@@ -122,7 +131,13 @@ class _PrescriptionFormScreenState extends State<PrescriptionFormScreen> {
                   labTests: labTests,
                 );
 
-                await OpenFilex.open(file.path);
+                print("PDF GENERATED");
+                print("PDF PATH => ${file.path}");
+
+                final result = await OpenFilex.open(file.path);
+
+                print("OPEN FILE RESULT => ${result.type}");
+                print("OPEN FILE MESSAGE => ${result.message}");
 
                 if (!mounted) return;
 
@@ -132,7 +147,8 @@ class _PrescriptionFormScreenState extends State<PrescriptionFormScreen> {
                   ),
                 );
               } else if (state is PrescriptionError) {
-                /// CLOSE ONLY LOADER
+                print("PRESCRIPTION ERROR => ${state.message}");
+
                 Navigator.of(context, rootNavigator: true).pop();
 
                 ScaffoldMessenger.of(
@@ -140,7 +156,6 @@ class _PrescriptionFormScreenState extends State<PrescriptionFormScreen> {
                 ).showSnackBar(SnackBar(content: Text(state.message)));
               }
             },
-
             child: Scaffold(
               resizeToAvoidBottomInset: true,
 
@@ -334,47 +349,48 @@ class _PrescriptionFormScreenState extends State<PrescriptionFormScreen> {
 
                       child: ElevatedButton(
                         onPressed: () async {
+                          if (medicines.isEmpty && labTests.isEmpty) {
+                            String message;
+
+                            if (selectedTab == 0) {
+                              message =
+                                  "Case History saved. Please add Medicine or Lab Test before prescribing.";
+                            } else if (selectedTab == 1) {
+                              message =
+                                  "Please add at least one Medicine before prescribing.";
+                            } else {
+                              message =
+                                  "Please add at least one Lab Test or Medicine before prescribing.";
+                            }
+
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(SnackBar(content: Text(message)));
+                            return;
+                          }
+
                           final cubit = context.read<PrescriptionCubit>();
 
                           final body = PrescriptionRequestBody(
                             patientCode: widget.patient.patientCode,
-
                             temperature: temperatureController.text,
-
                             height: heightController.text,
-
                             weight: weightController.text,
-
                             pulse: pulseController.text,
-
                             bloodPressure: bloodPressureController.text,
-
                             bloodSugar: bloodSugarController.text,
-
                             hemoglobin: hemoglobinController.text,
-
                             spo2: spo2Controller.text,
-
                             respirationRate: respirationController.text,
-
                             allergy: allergyController.text,
-
                             chiefComplaint: chiefComplaintController.text,
-
                             history: historyController.text,
-
                             findings: findingsController.text,
-
                             diagnosis: diagnosisController.text,
-
                             treatmentAdvice: treatmentController.text,
-
                             endNote: endNoteController.text,
-
                             notes: notesController.text,
-
                             followUpDate: followUpDateController.text,
-
                             prescriptionDate: DateTime.now().toString(),
                           );
 
@@ -384,7 +400,6 @@ class _PrescriptionFormScreenState extends State<PrescriptionFormScreen> {
                             labTests: labTests,
                           );
                         },
-
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
                           backgroundColor: const Color(0xff7CDDCB),

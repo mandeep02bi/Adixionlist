@@ -118,7 +118,9 @@ class _AddperscriptionfirstdrState extends State<Addperscriptionfirstdr>
 
   Future<List<MedicineRequestBody>> _getMedicines() async {
     final localMeds = await MedicineDatabase.instance.getAllMedicines();
+
     return localMeds
+        .where((m) => m.name.trim().isNotEmpty)
         .map(
           (m) => MedicineRequestBody(
             name: m.name,
@@ -148,7 +150,35 @@ class _AddperscriptionfirstdrState extends State<Addperscriptionfirstdr>
   // ── Prescribe button handler ──────────────────────────────────────────────
 
   Future<void> _onPresscribe() async {
+    print("INSIDE _onPresscribe()");
     final medicines = await _getMedicines();
+
+    print("MEDICINES COUNT => ${medicines.length}");
+
+    for (final m in medicines) {
+      print(
+        "NAME='${m.name}' "
+        "QTY='${m.totalQuantity}' "
+        "FREQ='${m.frequency}'",
+      );
+    }
+
+    // Validation
+    final validMedicines = medicines.where((m) {
+      return m.name.trim().isNotEmpty;
+    }).toList();
+
+    if (validMedicines.isEmpty) {
+      Get.snackbar(
+        "Medicine Required",
+        "Please add at least one medicine before prescribing.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
     final labTests = await _getLabTests();
 
     final body = _buildPrescriptionBody();

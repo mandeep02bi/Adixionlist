@@ -113,6 +113,27 @@ class _PrescriptionlistState extends State<Prescriptionlist> {
           });
 
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+
+      floatingActionButton: widget.patient != null && _canAddPrescription
+          ? FloatingActionButton(
+              backgroundColor: const Color(0xFF24937D),
+              child: const Icon(Icons.add, color: Colors.white),
+              onPressed: () async {
+                final result = await Get.to(
+                  () => BlocProvider(
+                    create: (_) => getIt<PrescriptionCubit>(),
+                    child: Addperscriptionfirstdr(patient: widget.patient!),
+                  ),
+                );
+
+                if (result == true) {
+                  setState(() {});
+                }
+              },
+            )
+          : null,
+
       body: Stack(
         children: [
           /// Background Gradient
@@ -162,8 +183,20 @@ class _PrescriptionlistState extends State<Prescriptionlist> {
                     left: 80.w,
                     child: Text(
                       widget.patient != null
-                          ? "Patient Prescriptions"
+                          ? [
+                                  widget.patient!.firstName,
+                                  widget.patient!.middleName,
+                                  widget.patient!.lastName,
+                                ]
+                                .where(
+                                  (e) =>
+                                      e != null &&
+                                      e.toString().trim().isNotEmpty,
+                                )
+                                .join(' ')
                           : "Prescription History",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20.sp,
@@ -171,34 +204,6 @@ class _PrescriptionlistState extends State<Prescriptionlist> {
                       ),
                     ),
                   ),
-
-                  if (widget.patient != null && _canAddPrescription)
-                    Positioned(
-                      top: 40.h,
-                      right: 20.w,
-                      child: CircleAvatar(
-                        radius: 22.r,
-                        backgroundColor: Colors.white24,
-                        child: IconButton(
-                          onPressed: () async {
-                            final result = await Get.to(
-                              () => Addperscriptionfirstdr(
-                                patient: widget.patient!,
-                              ),
-                            );
-                            if (result == true) {
-                              // Re-trigger layout rebuild if we came back successfully
-                              setState(() {});
-                            }
-                          },
-                          icon: Image.asset(
-                            "assets/images/Icons/Patient/Add.png",
-                            height: 80.h,
-                            width: 80.w,
-                          ),
-                        ),
-                      ),
-                    ),
                 ],
               ),
 
