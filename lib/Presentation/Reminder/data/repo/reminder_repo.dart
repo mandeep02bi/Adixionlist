@@ -30,4 +30,31 @@ class ReminderRepo {
       return ApiResult.error(ErrorHandler.handle(error));
     }
   }
+
+  Future<ApiResult<ReminderResponse>> updateReminder({
+    required int id,
+    required Map<String, dynamic> body,
+  }) async {
+    try {
+      final response =
+      await reminderApiService.updateReminder(id, body);
+
+      return ApiResult.success(response);
+    } catch (error) {
+      return ApiResult.error(ErrorHandler.handle(error));
+    }
+  }
+
+  Future<ApiResult<ReminderResponse>> deleteReminder(
+      int id,
+      ) async {
+    try {
+      final response =
+      await reminderApiService.deleteReminder(id);
+
+      return ApiResult.success(response);
+    } catch (error) {
+      return ApiResult.error(ErrorHandler.handle(error));
+    }
+  }
 }

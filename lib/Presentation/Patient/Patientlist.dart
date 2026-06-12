@@ -17,6 +17,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../Reminder/logic/reminder_cubit.dart';
+
 class PatientListScreen extends StatefulWidget {
   const PatientListScreen({super.key});
 
@@ -270,7 +272,10 @@ class _PatientListScreenState extends State<PatientListScreen> {
                                                   gridItem(
                                                     "assets/images/Icons/Patient/Reminder.png",
                                                     "Set Reminder",
-                                                    Reminder(patient: item),
+                                                    BlocProvider(
+                                                      create: (_) => getIt<ReminderCubit>(),
+                                                      child: Reminder(patient: item),
+                                                    ),
                                                   ),
                                                   gridItem(
                                                     "assets/images/Icons/Patient/p.png",
