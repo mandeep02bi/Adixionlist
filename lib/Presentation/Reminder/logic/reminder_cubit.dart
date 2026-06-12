@@ -16,6 +16,7 @@ class ReminderCubit extends Cubit<ReminderState> {
     response.when(
       success: (data) {
         emit(ReminderState.success(data));
+
       },
       error: (error) {
         emit(ReminderState.error(error: error.failure.message));
@@ -36,6 +37,56 @@ class ReminderCubit extends Cubit<ReminderState> {
       },
       error: (error) {
         emit(ReminderState.error(error: error.failure.message));
+      },
+    );
+  }
+
+
+  Future<void> updateReminder({
+    required int id,
+    required ReminderRequestBody body,
+  }) async {
+    emit(const ReminderState.loading());
+
+    final result = await reminderRepo.updateReminder(
+      id: id,
+      body: body.toJson(),
+    );
+
+    result.when(
+      success: (data) {
+        emit(ReminderState.success(data));
+      },
+      error: (error) {
+        emit(
+          ReminderState.error(
+            error: error.failure.message,
+          ),
+        );
+      },
+    );
+  }
+
+  void deleteReminder({
+    required int id,
+    required String patientCode,
+  }) async {
+
+    emit(const ReminderState.loading());
+
+    final response =
+    await reminderRepo.deleteReminder(id);
+
+    response.when(
+      success: (data) {
+        getReminders(patientCode: patientCode);
+      },
+      error: (error) {
+        emit(
+          ReminderState.error(
+            error: error.failure.message,
+          ),
+        );
       },
     );
   }

@@ -82,12 +82,14 @@ class RecordCertificate {
   final String certificateDate;
   @JsonKey(name: 'doctor_name')
   final String? doctorName;
+  final String? description;
 
   RecordCertificate({
     required this.id,
     required this.title,
     required this.certificateDate,
     this.doctorName,
+    this.description,
   });
 
   factory RecordCertificate.fromJson(Map<String, dynamic> json) =>
@@ -104,12 +106,14 @@ class RecordInstruction {
   final String instructionDate;
   @JsonKey(name: 'doctor_name')
   final String? doctorName;
+  final String? description;
 
   RecordInstruction({
     required this.id,
     required this.title,
     required this.instructionDate,
     this.doctorName,
+    this.description,
   });
 
   factory RecordInstruction.fromJson(Map<String, dynamic> json) =>
@@ -188,6 +192,8 @@ class RecordAppointment {
 
   Map<String, dynamic> toJson() => _$RecordAppointmentToJson(this);
 }
+
+
 
 @JsonSerializable()
 class RecordReminder {

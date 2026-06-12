@@ -45,4 +45,58 @@ class InstructionCubit extends Cubit<InstructionState> {
       },
     );
   }
+
+// UPDATE INSTRUCTION
+  void updateInstruction(
+      int id,
+      InstructionRequestBody body,
+      ) async {
+    emit(const InstructionState.loading());
+
+    final response = await instructionRepo.updateInstruction(
+      id,
+      body,
+    );
+
+    response.when(
+      success: (data) {
+        if (!isClosed) {
+          emit(InstructionState.success(data));
+        }
+      },
+      error: (error) {
+        if (!isClosed) {
+          emit(
+            InstructionState.error(
+              error: error.failure.message,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+// DELETE INSTRUCTION
+  void deleteInstruction(
+      int id,
+      String patientCode,
+      ) async {
+    emit(const InstructionState.loading());
+
+    final response = await instructionRepo.deleteInstruction(id);
+
+    response.when(
+      success: (_) {
+        getInstructions(patientCode);
+      },
+      error: (error) {
+        emit(
+          InstructionState.error(
+            error: error.failure.message,
+          ),
+        );
+      },
+    );
+  }
+
 }

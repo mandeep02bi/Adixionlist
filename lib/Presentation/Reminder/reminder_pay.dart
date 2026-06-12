@@ -16,8 +16,11 @@ import 'package:intl/intl.dart';
 
 class ReminderPay extends StatefulWidget {
   final PatientModel patient;
+  final bool isEdit;
+  final dynamic reminderData;
 
-  const ReminderPay({super.key, required this.patient});
+
+  const ReminderPay({super.key, required this.patient,this.isEdit=false,this.reminderData});
 
   @override
   State<ReminderPay> createState() => _ReminderPayState();
@@ -37,6 +40,16 @@ class _ReminderPayState extends State<ReminderPay> {
     descCtrl.text = "Consultation fees balance due.";
     linkCtrl.text = "https://pay.adixonclinicos.info/PT-001";
     super.initState();
+    if (widget.isEdit) {
+      titleCtrl.text =
+          widget.reminderData.title ?? '';
+
+      descCtrl.text =
+          widget.reminderData.description ?? '';
+
+      linkCtrl.text =
+          widget.reminderData.paymentLink ?? '';
+    }
   }
 
   void saveReminder(BuildContext context) {
@@ -64,7 +77,19 @@ class _ReminderPayState extends State<ReminderPay> {
       endDate: DateFormat('yyyy-MM-dd').format(endDate),
     );
 
-    context.read<ReminderCubit>().createReminder(body);
+    if (widget.isEdit) {
+
+      context.read<ReminderCubit>().updateReminder(
+        id: widget.reminderData.id,
+        body: body,
+      );
+
+    } else {
+
+      context.read<ReminderCubit>().createReminder(
+        body,
+      );
+    }
   }
 
   @override
@@ -89,7 +114,7 @@ class _ReminderPayState extends State<ReminderPay> {
                       success: (data) {
                         Get.snackbar(
                           "Success",
-                          "Payment Reminder set successfully!",
+                          widget.isEdit?"Payment Reminder updated successfully!":"Payment Reminder set successfully!",
                           backgroundColor: Colors.green,
                           colorText: Colors.white,
                         );
@@ -111,7 +136,7 @@ class _ReminderPayState extends State<ReminderPay> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const CustomHeaderReminder(title: 'Set Reminder'),
+                           CustomHeaderReminder(title: widget.isEdit?"Update Payment Reminder":'Set Payment Reminder'),
                           SizedBox(height: 10.h),
                           Expanded(
                             child: SingleChildScrollView(
@@ -240,7 +265,7 @@ class _ReminderPayState extends State<ReminderPay> {
                                         ),
                                       ),
                                       child: Text(
-                                        "Save Payment Reminder",
+                                        widget.isEdit?"Update Payment Reminder":"Save Payment Reminder",
                                         style: TextStyle(fontSize: 16.sp, color: Colors.white, fontWeight: FontWeight.bold),
                                       ),
                                     ),

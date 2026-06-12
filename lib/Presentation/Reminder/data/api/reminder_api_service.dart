@@ -20,4 +20,16 @@ abstract class ReminderApiService {
     @Query('patient_code') String? patientCode,
     @Query('reminder_type') String? reminderType,
   );
+
+  @PUT('${ApiConst.reminders}/{id}')
+  Future<ReminderResponse> updateReminder(
+      @Path('id') int id,
+      @Body() Map<String, dynamic> body,
+      );
+
+  @DELETE('${ApiConst.reminders}/{id}')
+  Future<ReminderResponse> deleteReminder(
+      @Path('id') int id,
+      );
+
 }

@@ -16,8 +16,11 @@ import 'package:intl/intl.dart';
 
 class ReminderNotes extends StatefulWidget {
   final PatientModel patient;
+  final bool isEdit;
+  final dynamic reminderData;
 
-  const ReminderNotes({super.key, required this.patient});
+  const ReminderNotes({super.key, required this.patient, this.isEdit = false,
+    this.reminderData,});
 
   @override
   State<ReminderNotes> createState() => _ReminderNotesState();
@@ -35,6 +38,21 @@ class _ReminderNotesState extends State<ReminderNotes> {
     titleCtrl.text = "Follow-up Appointment";
     descCtrl.text = "Remember to take your medications daily.";
     super.initState();
+    if (widget.isEdit) {
+      titleCtrl.text =
+          widget.reminderData.title ?? '';
+
+      descCtrl.text =
+          widget.reminderData.description ?? '';
+
+      if(widget.reminderData.startDate != null) {
+        startDate = DateTime.parse(widget.reminderData.startDate);
+      }
+      if(widget.reminderData.endDate != null) {
+        endDate = DateTime.parse(widget.reminderData.endDate);
+      }
+
+    }
   }
 
   void saveReminder(BuildContext context) {
@@ -60,8 +78,16 @@ class _ReminderNotesState extends State<ReminderNotes> {
       endDate: DateFormat('yyyy-MM-dd').format(endDate),
     );
 
-    context.read<ReminderCubit>().createReminder(body);
-  }
+    if (widget.isEdit) {
+      // Call Update logic
+      context.read<ReminderCubit>().updateReminder(
+        id: widget.reminderData.id, // Ensure your model has 'id'
+        body: body,
+      );
+    } else {
+      // Call Create logic
+      context.read<ReminderCubit>().createReminder(body);
+    }}
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +111,7 @@ class _ReminderNotesState extends State<ReminderNotes> {
                       success: (data) {
                         Get.snackbar(
                           "Success",
-                          "Reminder set successfully!",
+                          widget.isEdit ? "Reminder updated successfully!" : "Reminder set successfully!",
                           backgroundColor: Colors.green,
                           colorText: Colors.white,
                         );
@@ -107,7 +133,7 @@ class _ReminderNotesState extends State<ReminderNotes> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const CustomHeaderReminder(title: 'Set Reminder'),
+                           CustomHeaderReminder(title: widget.isEdit?"Update Reminder":'Set Reminder'),
                           SizedBox(height: 10.h),
                           Expanded(
                             child: SingleChildScrollView(
@@ -215,7 +241,9 @@ class _ReminderNotesState extends State<ReminderNotes> {
                                     
                                     // Save Button
                                     ElevatedButton(
-                                      onPressed: () => saveReminder(context),
+                                      onPressed: () {
+                                        saveReminder(context);
+                                      },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color(0xFF7B3FCF),
                                         minimumSize: Size(double.infinity, 50.h),
@@ -224,7 +252,7 @@ class _ReminderNotesState extends State<ReminderNotes> {
                                         ),
                                       ),
                                       child: Text(
-                                        "Save Reminder",
+                                        widget.isEdit ? "Update Reminder" : "Save Reminder",
                                         style: TextStyle(fontSize: 16.sp, color: Colors.white, fontWeight: FontWeight.bold),
                                       ),
                                     ),
