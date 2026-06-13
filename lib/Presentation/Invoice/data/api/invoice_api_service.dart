@@ -37,4 +37,10 @@ abstract class InvoiceApiService {
   Future<InvoiceResponse> deleteInvoice(
     @Path('id') int id,
   );
+
+  @PUT('${ApiConst.invoices}/{id}')
+  Future<InvoiceResponse> updateInvoice(
+      @Path('id') int id,
+      @Body() InvoiceRequestBody body,
+      );
 }

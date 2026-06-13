@@ -10,6 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import 'invoice_details_screen.dart';
+
 class Invoice extends StatefulWidget {
   const Invoice({super.key});
 
@@ -77,12 +79,31 @@ class _InvoiceState extends State<Invoice> {
                               final amountDouble = double.tryParse(item.totalAmount ?? '0') ?? 0.0;
                               final amountInt = amountDouble.round();
 
-                              return InvoiceCard(
-                                name: item.billToName ?? item.patientName ?? "Unknown Patient",
-                                patientId: item.patientCode ?? "PT-000",
-                                age: 27, // backend does not provide age, using standard default
-                                amount: amountInt,
-                                isPaid: item.status?.toLowerCase() == 'paid',
+                              return InkWell(
+                                onTap: () async {
+
+                                  final result = await Get.to(
+                                        () => BlocProvider.value(
+                                      value: context.read<InvoiceCubit>(),
+                                      child: InvoiceDetailsScreen(
+                                        invoiceId: item.id!,
+                                      ),
+                                    ),
+                                  );
+
+                                  if (result == true) {
+
+                                    context.read<InvoiceCubit>().getInvoices();
+
+                                  }
+                                },
+                                child: InvoiceCard(
+                                  name: item.billToName ?? item.patientName ?? "Unknown Patient",
+                                  patientId: item.patientCode ?? "PT-000",
+                                  age: 27, // backend does not provide age, using standard default
+                                  amount: amountInt,
+                                  isPaid: item.status?.toLowerCase() == 'paid',
+                                ),
                               );
                             },
                           );

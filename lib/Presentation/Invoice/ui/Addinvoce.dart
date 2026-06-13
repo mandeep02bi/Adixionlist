@@ -12,10 +12,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+
+import '../data/models/invoice_response.dart';
 
 class Addinvoce extends StatefulWidget {
   final PatientModel? patient;
-  const Addinvoce({super.key, this.patient});
+  final bool isEdit;
+  final InvoiceResponseData? invoice;
+  const Addinvoce({super.key, this.patient,this.isEdit = false,
+    this.invoice,});
 
   @override
   State<Addinvoce> createState() => _AddinvoceState();
@@ -37,6 +43,7 @@ class _AddinvoceState extends State<Addinvoce>
   // Temporary Single Item Input Controllers
   final itemDescCtrl = TextEditingController();
   final itemAmountCtrl = TextEditingController();
+
 
   // Selections
   String? selectedPatientCode;
@@ -72,6 +79,61 @@ class _AddinvoceState extends State<Addinvoce>
     }
 
     super.initState();
+
+    if (widget.isEdit && widget.invoice != null) {
+
+      final invoice = widget.invoice!;
+
+      selectedPatientCode = invoice.patientCode;
+
+      billToNameCtrl.text =
+          invoice.billToName ?? '';
+
+      invoiceTitleCtrl.text =
+          invoice.invoiceTitle ?? '';
+
+      discountTitleCtrl.text =
+          invoice.discountTitle ?? 'Discount';
+
+      advanceTitleCtrl.text =
+          invoice.advanceTitle ?? 'Amount Paid';
+
+      taxTitleCtrl.text =
+          invoice.taxTitle ?? 'GST';
+
+      remarkCtrl.text =
+          invoice.remark ?? '';
+
+      dateCtrl.text =
+          invoice.invoiceDate ?? '';
+
+      selectedDiscountAmount =
+          (double.tryParse(invoice.discountValue ?? '0') ?? 0)
+              .toInt()
+              .toString();
+
+      selectedAdvanceAmount =
+          (double.tryParse(invoice.advanceAmount ?? '0') ?? 0)
+              .toInt()
+              .toString();
+
+      selectedTaxAmount =
+          (double.tryParse(invoice.taxValue ?? '0') ?? 0)
+              .toInt()
+              .toString();
+      selectedStatus =
+          invoice.status ?? 'To pay';
+
+      addedItems = invoice.items
+          ?.map(
+            (e) => InvoiceItemRequestBody(
+          description: e.description,
+          amount: double.tryParse(e.amount) ?? 0,
+        ),
+      )
+          .toList() ??
+          [];
+    }
   }
 
   // Calculate items total
@@ -168,7 +230,7 @@ class _AddinvoceState extends State<Addinvoce>
       );
       return;
     }
-
+    final parsedDate = DateTime.parse(dateCtrl.text);
     final body = InvoiceRequestBody(
       patientCode: selectedPatientCode!,
       billToName: billToNameCtrl.text.trim(),
@@ -183,11 +245,26 @@ class _AddinvoceState extends State<Addinvoce>
       taxValue: double.tryParse(selectedTaxAmount ?? '0'),
       taxType: "Percentage",
       remark: remarkCtrl.text.trim(),
-      invoiceDate: dateCtrl.text.trim(),
+      invoiceDate: DateFormat('yyyy-MM-dd').format(parsedDate),
       status: selectedStatus,
     );
 
-    context.read<InvoiceCubit>().createInvoice(body, addedItems);
+    if (widget.isEdit) {
+
+      context.read<InvoiceCubit>().updateInvoice(
+        widget.invoice!.id,
+        body,
+        addedItems
+      );
+
+    } else {
+
+      context.read<InvoiceCubit>().createInvoice(
+        body,
+        addedItems,
+      );
+
+    }
   }
 
   @override
@@ -243,6 +320,26 @@ class _AddinvoceState extends State<Addinvoce>
                           colorText: Colors.white,
                         );
                       },
+
+                      updateInvoiceSuccess: (data) {
+                        Get.snackbar(
+                          "Success",
+                          "Invoice updated successfully!",
+                          backgroundColor: Colors.green,
+                          colorText: Colors.white,
+                        );
+
+                        Navigator.pop(context, true);
+                      },
+
+                      updateInvoiceError: (errorMsg) {
+                        Get.snackbar(
+                          "Update Failed",
+                          errorMsg,
+                          backgroundColor: Colors.red,
+                          colorText: Colors.white,
+                        );
+                      },
                       orElse: () {},
                     );
                   },
@@ -250,7 +347,9 @@ class _AddinvoceState extends State<Addinvoce>
                     children: [
                       Column(
                         children: [
-                          const CustomHeaderInvoice(title: 'Create Invoice'),
+                           CustomHeaderInvoice(title:  widget.isEdit
+                              ? 'Update Invoice'
+                              : 'Create Invoice'),
 
                           /// TABS
                           TabBar(
@@ -486,7 +585,7 @@ class _AddinvoceState extends State<Addinvoce>
                                               ),
                                             ),
                                             child: Text(
-                                              "Add",
+                                              widget.isEdit ? "Update" : "Add",
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 14.sp,
@@ -502,6 +601,7 @@ class _AddinvoceState extends State<Addinvoce>
 
                                 /// 🔷 SECOND TAB
                                 MoreDetails(
+                                  isEdit: widget.isEdit,
                                   discountTitleCtrl: discountTitleCtrl,
                                   advanceTitleCtrl: advanceTitleCtrl,
                                   taxTitleCtrl: taxTitleCtrl,

@@ -82,6 +82,7 @@ class _CustomHeaderRecordesState extends State<CustomHeaderRecordes> {
                             ),
                           ],
                         ),
+                        /*
                         SizedBox(height: 16.h),
                         Row(
                           children: [
@@ -122,7 +123,11 @@ class _CustomHeaderRecordesState extends State<CustomHeaderRecordes> {
                             ),
                           ],
                         ),
+
+                         */
                         SizedBox(height: 16.h),
+
+
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(

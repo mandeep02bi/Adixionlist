@@ -18,6 +18,7 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:intl/intl.dart';
 import 'package:doctor/Presentation/Certificate/CertificatePdfScreen.dart';
 
+import '../Invoice/ui/invoice_details_screen.dart';
 import 'instruction_detail_screen.dart' show InstructionDetailsScreen;
 
 class Records extends StatefulWidget {
@@ -315,18 +316,35 @@ class _RecordsState extends State<Records> {
     } else {
       final list = records.invoices ?? [];
       if (list.isEmpty) return _buildEmptyState();
+      print("Invoices Count = ${records.invoices?.length}");
+      print("Invoices Data = ${records.invoices}");
       return ListView.builder(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         itemCount: list.length,
         itemBuilder: (context, index) {
           final item = list[index];
           final isPaid = item.status.toLowerCase() == "paid";
-          return _buildRecordCard(
-            title: item.invoiceTitle,
-            subtitle: "Amount: ${item.totalAmount}",
-            date: "",
-            tag: item.status,
-            tagColor: isPaid ? Colors.green : Colors.red,
+          return InkWell(
+            onTap: () async{
+             final result=await Get.to(
+                    () => InvoiceDetailsScreen(
+                  invoiceId: item.id,
+                ),
+              );
+
+              if (result == true) {
+                context.read<RecordsCubit>().getRecords(
+                  selectedPatient!.patientCode,
+                );
+              }
+            },
+            child: _buildRecordCard(
+              title: item.invoiceTitle,
+              subtitle: "Amount: ${item.totalAmount}",
+              date:item.invoiceTitle ?? "",
+              tag: item.status,
+              tagColor: isPaid ? Colors.green : Colors.red,
+            ),
           );
         },
       );

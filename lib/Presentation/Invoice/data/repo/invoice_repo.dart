@@ -55,10 +55,30 @@ class InvoiceRepo {
 
   Future<ApiResult<InvoiceResponse>> deleteInvoice(int id) async {
     try {
-      final response = await invoiceApiService.deleteInvoice(id);
+      final response = await invoiceApiService.deleteInvoice(id,);
       return ApiResult.success(response);
     } catch (error) {
       return ApiResult.error(ErrorHandler.handle(error));
     }
   }
+
+  Future<ApiResult<InvoiceResponse>> updateInvoice(
+      int id,
+      InvoiceRequestBody body,
+      ) async {
+    try {
+      final response =
+      await invoiceApiService.updateInvoice(
+        id,
+        body,
+      );
+
+      return ApiResult.success(response);
+    } catch (error) {
+      return ApiResult.error(
+        ErrorHandler.handle(error),
+      );
+    }
+  }
+
 }

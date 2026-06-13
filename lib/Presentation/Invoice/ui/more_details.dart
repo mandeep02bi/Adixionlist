@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MoreDetails extends StatefulWidget {
+  final bool isEdit;
+
   final TextEditingController discountTitleCtrl;
   final TextEditingController advanceTitleCtrl;
   final TextEditingController taxTitleCtrl;
@@ -25,6 +27,7 @@ class MoreDetails extends StatefulWidget {
 
   const MoreDetails({
     super.key,
+    required this.isEdit,
     required this.discountTitleCtrl,
     required this.advanceTitleCtrl,
     required this.taxTitleCtrl,
@@ -348,7 +351,7 @@ class _MoreDetailsState extends State<MoreDetails> {
 
             // Total + Add Button
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(
@@ -374,7 +377,7 @@ class _MoreDetailsState extends State<MoreDetails> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF7B3FCF),
                     padding: EdgeInsets.symmetric(
-                      horizontal: 50.w,
+                      horizontal: 40.w,
                       vertical: 14.h,
                     ),
                     shape: RoundedRectangleBorder(
@@ -382,7 +385,7 @@ class _MoreDetailsState extends State<MoreDetails> {
                     ),
                   ),
                   child: Text(
-                    'Add',
+                    widget.isEdit ? 'Update' : 'Add',
                     style: TextStyle(color: Colors.white, fontSize: 16.sp),
                   ),
                 ),

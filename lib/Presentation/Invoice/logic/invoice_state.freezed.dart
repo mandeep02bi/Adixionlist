@@ -55,7 +55,7 @@ extension InvoiceStatePatterns<T> on InvoiceState<T> {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial<T> value)?  initial,TResult Function( Loading<T> value)?  loading,TResult Function( FetchInvoicesSuccess<T> value)?  fetchInvoicesSuccess,TResult Function( FetchInvoicesError<T> value)?  fetchInvoicesError,TResult Function( CreateInvoiceSuccess<T> value)?  createInvoiceSuccess,TResult Function( CreateInvoiceError<T> value)?  createInvoiceError,TResult Function( FetchPatientsSuccess<T> value)?  fetchPatientsSuccess,TResult Function( FetchPatientsError<T> value)?  fetchPatientsError,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial<T> value)?  initial,TResult Function( Loading<T> value)?  loading,TResult Function( FetchInvoicesSuccess<T> value)?  fetchInvoicesSuccess,TResult Function( FetchInvoicesError<T> value)?  fetchInvoicesError,TResult Function( CreateInvoiceSuccess<T> value)?  createInvoiceSuccess,TResult Function( CreateInvoiceError<T> value)?  createInvoiceError,TResult Function( FetchPatientsSuccess<T> value)?  fetchPatientsSuccess,TResult Function( FetchPatientsError<T> value)?  fetchPatientsError,TResult Function( UpdateInvoiceSuccess<T> value)?  updateInvoiceSuccess,TResult Function( UpdateInvoiceError<T> value)?  updateInvoiceError,TResult Function( DeleteInvoiceSuccess<T> value)?  deleteInvoiceSuccess,TResult Function( DeleteInvoiceError<T> value)?  deleteInvoiceError,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
@@ -66,7 +66,11 @@ return fetchInvoicesError(_that);case CreateInvoiceSuccess() when createInvoiceS
 return createInvoiceSuccess(_that);case CreateInvoiceError() when createInvoiceError != null:
 return createInvoiceError(_that);case FetchPatientsSuccess() when fetchPatientsSuccess != null:
 return fetchPatientsSuccess(_that);case FetchPatientsError() when fetchPatientsError != null:
-return fetchPatientsError(_that);case _:
+return fetchPatientsError(_that);case UpdateInvoiceSuccess() when updateInvoiceSuccess != null:
+return updateInvoiceSuccess(_that);case UpdateInvoiceError() when updateInvoiceError != null:
+return updateInvoiceError(_that);case DeleteInvoiceSuccess() when deleteInvoiceSuccess != null:
+return deleteInvoiceSuccess(_that);case DeleteInvoiceError() when deleteInvoiceError != null:
+return deleteInvoiceError(_that);case _:
   return orElse();
 
 }
@@ -84,7 +88,7 @@ return fetchPatientsError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial<T> value)  initial,required TResult Function( Loading<T> value)  loading,required TResult Function( FetchInvoicesSuccess<T> value)  fetchInvoicesSuccess,required TResult Function( FetchInvoicesError<T> value)  fetchInvoicesError,required TResult Function( CreateInvoiceSuccess<T> value)  createInvoiceSuccess,required TResult Function( CreateInvoiceError<T> value)  createInvoiceError,required TResult Function( FetchPatientsSuccess<T> value)  fetchPatientsSuccess,required TResult Function( FetchPatientsError<T> value)  fetchPatientsError,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial<T> value)  initial,required TResult Function( Loading<T> value)  loading,required TResult Function( FetchInvoicesSuccess<T> value)  fetchInvoicesSuccess,required TResult Function( FetchInvoicesError<T> value)  fetchInvoicesError,required TResult Function( CreateInvoiceSuccess<T> value)  createInvoiceSuccess,required TResult Function( CreateInvoiceError<T> value)  createInvoiceError,required TResult Function( FetchPatientsSuccess<T> value)  fetchPatientsSuccess,required TResult Function( FetchPatientsError<T> value)  fetchPatientsError,required TResult Function( UpdateInvoiceSuccess<T> value)  updateInvoiceSuccess,required TResult Function( UpdateInvoiceError<T> value)  updateInvoiceError,required TResult Function( DeleteInvoiceSuccess<T> value)  deleteInvoiceSuccess,required TResult Function( DeleteInvoiceError<T> value)  deleteInvoiceError,}){
 final _that = this;
 switch (_that) {
 case _Initial():
@@ -95,7 +99,11 @@ return fetchInvoicesError(_that);case CreateInvoiceSuccess():
 return createInvoiceSuccess(_that);case CreateInvoiceError():
 return createInvoiceError(_that);case FetchPatientsSuccess():
 return fetchPatientsSuccess(_that);case FetchPatientsError():
-return fetchPatientsError(_that);case _:
+return fetchPatientsError(_that);case UpdateInvoiceSuccess():
+return updateInvoiceSuccess(_that);case UpdateInvoiceError():
+return updateInvoiceError(_that);case DeleteInvoiceSuccess():
+return deleteInvoiceSuccess(_that);case DeleteInvoiceError():
+return deleteInvoiceError(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -112,7 +120,7 @@ return fetchPatientsError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial<T> value)?  initial,TResult? Function( Loading<T> value)?  loading,TResult? Function( FetchInvoicesSuccess<T> value)?  fetchInvoicesSuccess,TResult? Function( FetchInvoicesError<T> value)?  fetchInvoicesError,TResult? Function( CreateInvoiceSuccess<T> value)?  createInvoiceSuccess,TResult? Function( CreateInvoiceError<T> value)?  createInvoiceError,TResult? Function( FetchPatientsSuccess<T> value)?  fetchPatientsSuccess,TResult? Function( FetchPatientsError<T> value)?  fetchPatientsError,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial<T> value)?  initial,TResult? Function( Loading<T> value)?  loading,TResult? Function( FetchInvoicesSuccess<T> value)?  fetchInvoicesSuccess,TResult? Function( FetchInvoicesError<T> value)?  fetchInvoicesError,TResult? Function( CreateInvoiceSuccess<T> value)?  createInvoiceSuccess,TResult? Function( CreateInvoiceError<T> value)?  createInvoiceError,TResult? Function( FetchPatientsSuccess<T> value)?  fetchPatientsSuccess,TResult? Function( FetchPatientsError<T> value)?  fetchPatientsError,TResult? Function( UpdateInvoiceSuccess<T> value)?  updateInvoiceSuccess,TResult? Function( UpdateInvoiceError<T> value)?  updateInvoiceError,TResult? Function( DeleteInvoiceSuccess<T> value)?  deleteInvoiceSuccess,TResult? Function( DeleteInvoiceError<T> value)?  deleteInvoiceError,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
@@ -123,7 +131,11 @@ return fetchInvoicesError(_that);case CreateInvoiceSuccess() when createInvoiceS
 return createInvoiceSuccess(_that);case CreateInvoiceError() when createInvoiceError != null:
 return createInvoiceError(_that);case FetchPatientsSuccess() when fetchPatientsSuccess != null:
 return fetchPatientsSuccess(_that);case FetchPatientsError() when fetchPatientsError != null:
-return fetchPatientsError(_that);case _:
+return fetchPatientsError(_that);case UpdateInvoiceSuccess() when updateInvoiceSuccess != null:
+return updateInvoiceSuccess(_that);case UpdateInvoiceError() when updateInvoiceError != null:
+return updateInvoiceError(_that);case DeleteInvoiceSuccess() when deleteInvoiceSuccess != null:
+return deleteInvoiceSuccess(_that);case DeleteInvoiceError() when deleteInvoiceError != null:
+return deleteInvoiceError(_that);case _:
   return null;
 
 }
@@ -140,7 +152,7 @@ return fetchPatientsError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( T data)?  fetchInvoicesSuccess,TResult Function( String error)?  fetchInvoicesError,TResult Function( T data)?  createInvoiceSuccess,TResult Function( String error)?  createInvoiceError,TResult Function( T data)?  fetchPatientsSuccess,TResult Function( String error)?  fetchPatientsError,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( T data)?  fetchInvoicesSuccess,TResult Function( String error)?  fetchInvoicesError,TResult Function( T data)?  createInvoiceSuccess,TResult Function( String error)?  createInvoiceError,TResult Function( T data)?  fetchPatientsSuccess,TResult Function( String error)?  fetchPatientsError,TResult Function( T data)?  updateInvoiceSuccess,TResult Function( String error)?  updateInvoiceError,TResult Function( T data)?  deleteInvoiceSuccess,TResult Function( String error)?  deleteInvoiceError,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case Loading() when loading != null:
@@ -150,7 +162,11 @@ return fetchInvoicesError(_that.error);case CreateInvoiceSuccess() when createIn
 return createInvoiceSuccess(_that.data);case CreateInvoiceError() when createInvoiceError != null:
 return createInvoiceError(_that.error);case FetchPatientsSuccess() when fetchPatientsSuccess != null:
 return fetchPatientsSuccess(_that.data);case FetchPatientsError() when fetchPatientsError != null:
-return fetchPatientsError(_that.error);case _:
+return fetchPatientsError(_that.error);case UpdateInvoiceSuccess() when updateInvoiceSuccess != null:
+return updateInvoiceSuccess(_that.data);case UpdateInvoiceError() when updateInvoiceError != null:
+return updateInvoiceError(_that.error);case DeleteInvoiceSuccess() when deleteInvoiceSuccess != null:
+return deleteInvoiceSuccess(_that.data);case DeleteInvoiceError() when deleteInvoiceError != null:
+return deleteInvoiceError(_that.error);case _:
   return orElse();
 
 }
@@ -168,7 +184,7 @@ return fetchPatientsError(_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( T data)  fetchInvoicesSuccess,required TResult Function( String error)  fetchInvoicesError,required TResult Function( T data)  createInvoiceSuccess,required TResult Function( String error)  createInvoiceError,required TResult Function( T data)  fetchPatientsSuccess,required TResult Function( String error)  fetchPatientsError,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( T data)  fetchInvoicesSuccess,required TResult Function( String error)  fetchInvoicesError,required TResult Function( T data)  createInvoiceSuccess,required TResult Function( String error)  createInvoiceError,required TResult Function( T data)  fetchPatientsSuccess,required TResult Function( String error)  fetchPatientsError,required TResult Function( T data)  updateInvoiceSuccess,required TResult Function( String error)  updateInvoiceError,required TResult Function( T data)  deleteInvoiceSuccess,required TResult Function( String error)  deleteInvoiceError,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case Loading():
@@ -178,7 +194,11 @@ return fetchInvoicesError(_that.error);case CreateInvoiceSuccess():
 return createInvoiceSuccess(_that.data);case CreateInvoiceError():
 return createInvoiceError(_that.error);case FetchPatientsSuccess():
 return fetchPatientsSuccess(_that.data);case FetchPatientsError():
-return fetchPatientsError(_that.error);case _:
+return fetchPatientsError(_that.error);case UpdateInvoiceSuccess():
+return updateInvoiceSuccess(_that.data);case UpdateInvoiceError():
+return updateInvoiceError(_that.error);case DeleteInvoiceSuccess():
+return deleteInvoiceSuccess(_that.data);case DeleteInvoiceError():
+return deleteInvoiceError(_that.error);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,7 +215,7 @@ return fetchPatientsError(_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( T data)?  fetchInvoicesSuccess,TResult? Function( String error)?  fetchInvoicesError,TResult? Function( T data)?  createInvoiceSuccess,TResult? Function( String error)?  createInvoiceError,TResult? Function( T data)?  fetchPatientsSuccess,TResult? Function( String error)?  fetchPatientsError,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( T data)?  fetchInvoicesSuccess,TResult? Function( String error)?  fetchInvoicesError,TResult? Function( T data)?  createInvoiceSuccess,TResult? Function( String error)?  createInvoiceError,TResult? Function( T data)?  fetchPatientsSuccess,TResult? Function( String error)?  fetchPatientsError,TResult? Function( T data)?  updateInvoiceSuccess,TResult? Function( String error)?  updateInvoiceError,TResult? Function( T data)?  deleteInvoiceSuccess,TResult? Function( String error)?  deleteInvoiceError,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case Loading() when loading != null:
@@ -205,7 +225,11 @@ return fetchInvoicesError(_that.error);case CreateInvoiceSuccess() when createIn
 return createInvoiceSuccess(_that.data);case CreateInvoiceError() when createInvoiceError != null:
 return createInvoiceError(_that.error);case FetchPatientsSuccess() when fetchPatientsSuccess != null:
 return fetchPatientsSuccess(_that.data);case FetchPatientsError() when fetchPatientsError != null:
-return fetchPatientsError(_that.error);case _:
+return fetchPatientsError(_that.error);case UpdateInvoiceSuccess() when updateInvoiceSuccess != null:
+return updateInvoiceSuccess(_that.data);case UpdateInvoiceError() when updateInvoiceError != null:
+return updateInvoiceError(_that.error);case DeleteInvoiceSuccess() when deleteInvoiceSuccess != null:
+return deleteInvoiceSuccess(_that.data);case DeleteInvoiceError() when deleteInvoiceError != null:
+return deleteInvoiceError(_that.error);case _:
   return null;
 
 }
@@ -665,6 +689,270 @@ class _$FetchPatientsErrorCopyWithImpl<T,$Res>
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? error = null,}) {
   return _then(FetchPatientsError<T>(
+error: null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class UpdateInvoiceSuccess<T> implements InvoiceState<T> {
+  const UpdateInvoiceSuccess(this.data);
+  
+
+ final  T data;
+
+/// Create a copy of InvoiceState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UpdateInvoiceSuccessCopyWith<T, UpdateInvoiceSuccess<T>> get copyWith => _$UpdateInvoiceSuccessCopyWithImpl<T, UpdateInvoiceSuccess<T>>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdateInvoiceSuccess<T>&&const DeepCollectionEquality().equals(other.data, data));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(data));
+
+@override
+String toString() {
+  return 'InvoiceState<$T>.updateInvoiceSuccess(data: $data)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $UpdateInvoiceSuccessCopyWith<T,$Res> implements $InvoiceStateCopyWith<T, $Res> {
+  factory $UpdateInvoiceSuccessCopyWith(UpdateInvoiceSuccess<T> value, $Res Function(UpdateInvoiceSuccess<T>) _then) = _$UpdateInvoiceSuccessCopyWithImpl;
+@useResult
+$Res call({
+ T data
+});
+
+
+
+
+}
+/// @nodoc
+class _$UpdateInvoiceSuccessCopyWithImpl<T,$Res>
+    implements $UpdateInvoiceSuccessCopyWith<T, $Res> {
+  _$UpdateInvoiceSuccessCopyWithImpl(this._self, this._then);
+
+  final UpdateInvoiceSuccess<T> _self;
+  final $Res Function(UpdateInvoiceSuccess<T>) _then;
+
+/// Create a copy of InvoiceState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? data = freezed,}) {
+  return _then(UpdateInvoiceSuccess<T>(
+freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
+as T,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class UpdateInvoiceError<T> implements InvoiceState<T> {
+  const UpdateInvoiceError({required this.error});
+  
+
+ final  String error;
+
+/// Create a copy of InvoiceState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UpdateInvoiceErrorCopyWith<T, UpdateInvoiceError<T>> get copyWith => _$UpdateInvoiceErrorCopyWithImpl<T, UpdateInvoiceError<T>>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdateInvoiceError<T>&&(identical(other.error, error) || other.error == error));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,error);
+
+@override
+String toString() {
+  return 'InvoiceState<$T>.updateInvoiceError(error: $error)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $UpdateInvoiceErrorCopyWith<T,$Res> implements $InvoiceStateCopyWith<T, $Res> {
+  factory $UpdateInvoiceErrorCopyWith(UpdateInvoiceError<T> value, $Res Function(UpdateInvoiceError<T>) _then) = _$UpdateInvoiceErrorCopyWithImpl;
+@useResult
+$Res call({
+ String error
+});
+
+
+
+
+}
+/// @nodoc
+class _$UpdateInvoiceErrorCopyWithImpl<T,$Res>
+    implements $UpdateInvoiceErrorCopyWith<T, $Res> {
+  _$UpdateInvoiceErrorCopyWithImpl(this._self, this._then);
+
+  final UpdateInvoiceError<T> _self;
+  final $Res Function(UpdateInvoiceError<T>) _then;
+
+/// Create a copy of InvoiceState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? error = null,}) {
+  return _then(UpdateInvoiceError<T>(
+error: null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class DeleteInvoiceSuccess<T> implements InvoiceState<T> {
+  const DeleteInvoiceSuccess(this.data);
+  
+
+ final  T data;
+
+/// Create a copy of InvoiceState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DeleteInvoiceSuccessCopyWith<T, DeleteInvoiceSuccess<T>> get copyWith => _$DeleteInvoiceSuccessCopyWithImpl<T, DeleteInvoiceSuccess<T>>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeleteInvoiceSuccess<T>&&const DeepCollectionEquality().equals(other.data, data));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(data));
+
+@override
+String toString() {
+  return 'InvoiceState<$T>.deleteInvoiceSuccess(data: $data)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DeleteInvoiceSuccessCopyWith<T,$Res> implements $InvoiceStateCopyWith<T, $Res> {
+  factory $DeleteInvoiceSuccessCopyWith(DeleteInvoiceSuccess<T> value, $Res Function(DeleteInvoiceSuccess<T>) _then) = _$DeleteInvoiceSuccessCopyWithImpl;
+@useResult
+$Res call({
+ T data
+});
+
+
+
+
+}
+/// @nodoc
+class _$DeleteInvoiceSuccessCopyWithImpl<T,$Res>
+    implements $DeleteInvoiceSuccessCopyWith<T, $Res> {
+  _$DeleteInvoiceSuccessCopyWithImpl(this._self, this._then);
+
+  final DeleteInvoiceSuccess<T> _self;
+  final $Res Function(DeleteInvoiceSuccess<T>) _then;
+
+/// Create a copy of InvoiceState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? data = freezed,}) {
+  return _then(DeleteInvoiceSuccess<T>(
+freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
+as T,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class DeleteInvoiceError<T> implements InvoiceState<T> {
+  const DeleteInvoiceError({required this.error});
+  
+
+ final  String error;
+
+/// Create a copy of InvoiceState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DeleteInvoiceErrorCopyWith<T, DeleteInvoiceError<T>> get copyWith => _$DeleteInvoiceErrorCopyWithImpl<T, DeleteInvoiceError<T>>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeleteInvoiceError<T>&&(identical(other.error, error) || other.error == error));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,error);
+
+@override
+String toString() {
+  return 'InvoiceState<$T>.deleteInvoiceError(error: $error)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DeleteInvoiceErrorCopyWith<T,$Res> implements $InvoiceStateCopyWith<T, $Res> {
+  factory $DeleteInvoiceErrorCopyWith(DeleteInvoiceError<T> value, $Res Function(DeleteInvoiceError<T>) _then) = _$DeleteInvoiceErrorCopyWithImpl;
+@useResult
+$Res call({
+ String error
+});
+
+
+
+
+}
+/// @nodoc
+class _$DeleteInvoiceErrorCopyWithImpl<T,$Res>
+    implements $DeleteInvoiceErrorCopyWith<T, $Res> {
+  _$DeleteInvoiceErrorCopyWithImpl(this._self, this._then);
+
+  final DeleteInvoiceError<T> _self;
+  final $Res Function(DeleteInvoiceError<T>) _then;
+
+/// Create a copy of InvoiceState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? error = null,}) {
+  return _then(DeleteInvoiceError<T>(
 error: null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String,
   ));
