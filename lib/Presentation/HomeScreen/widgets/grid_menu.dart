@@ -1,5 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:doctor/Core/helper/image_assets.dart';
+import 'package:doctor/Presentation/Appointment/appointment_list_screen.dart';
+import 'package:doctor/Presentation/MyTemplate/my_template.dart';
 import 'package:doctor/Presentation/Records/records.dart';
 import 'package:doctor/core/Theme/color_app.dart';
 import 'package:doctor/Presentation/Patient/Patientlist.dart';
@@ -17,7 +19,7 @@ class GridMenu extends StatelessWidget {
       "Patient List",
       "Appointments",
       "My Templates",
-      "Send Notifications",
+      //  "Send Notifications",
       "View Records",
     ];
     final itemsimage = [
@@ -47,6 +49,12 @@ class GridMenu extends StatelessWidget {
                 onTap: () {
                   if (items[index] == "Patient List") {
                     Get.to(const PatientListScreen());
+                  }
+                  if (items[index] == "Appointments") {
+                    Get.to(() => const AppointmentListScreen());
+                  }
+                  if (items[index] == "My Templates") {
+                    Get.to(() => const MyTemplate(type: "Prescription"));
                   }
                   if (items[index] == "View Records") {
                     Get.to(() => const Records());

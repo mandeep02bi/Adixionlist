@@ -36,7 +36,7 @@ class _AppointmentState extends State<Appointment> {
     "15:00",
     "15:30",
     "14:00",
-    "14:30"
+    "14:30",
   ];
 
   final displayTimes = [
@@ -51,7 +51,7 @@ class _AppointmentState extends State<Appointment> {
     "03:00 PM",
     "03:30 PM",
     "04:00 PM",
-    "04:30 PM"
+    "04:30 PM",
   ];
 
   late List<DateTime> dateList;
@@ -59,7 +59,10 @@ class _AppointmentState extends State<Appointment> {
   @override
   void initState() {
     // Generate next 5 days
-    dateList = List.generate(5, (index) => DateTime.now().add(Duration(days: index)));
+    dateList = List.generate(
+      5,
+      (index) => DateTime.now().add(Duration(days: index)),
+    );
     super.initState();
   }
 
@@ -78,7 +81,8 @@ class _AppointmentState extends State<Appointment> {
     final timeStr = times[selectedTimeIndex];
 
     // Get logged in doctor code
-    final doctorCode = await getIt<TokenStorageService>().getUserCode() ?? "DR0001";
+    final doctorCode =
+        await getIt<TokenStorageService>().getUserCode() ?? "DR0001";
 
     final body = AppointmentRequestBody(
       patientCode: widget.patient.patientCode,
@@ -98,8 +102,10 @@ class _AppointmentState extends State<Appointment> {
   Widget build(BuildContext context) {
     // Initials avatar
     String initials = "PT";
-    if (widget.patient.firstName.isNotEmpty && widget.patient.lastName.isNotEmpty) {
-      initials = "${widget.patient.firstName[0].toUpperCase()}${widget.patient.lastName[0].toUpperCase()}";
+    if (widget.patient.firstName.isNotEmpty &&
+        widget.patient.lastName.isNotEmpty) {
+      initials =
+          "${widget.patient.firstName[0].toUpperCase()}${widget.patient.lastName[0].toUpperCase()}";
     }
 
     return BlocProvider<AppointmentCubit>(
@@ -125,6 +131,7 @@ class _AppointmentState extends State<Appointment> {
                         backgroundColor: Colors.green,
                         colorText: Colors.white,
                       );
+
                       Navigator.pop(context, true);
                     },
                     error: (errorMsg) {
@@ -148,15 +155,21 @@ class _AppointmentState extends State<Appointment> {
                               children: [
                                 Image.asset(
                                   "assets/images/Header/header.png",
-                                  height: orientation == Orientation.portrait ? 110.h : 70.h,
+                                  height: orientation == Orientation.portrait
+                                      ? 110.h
+                                      : 70.h,
                                   width: double.infinity,
                                   fit: BoxFit.fill,
                                 ),
                                 Positioned(
-                                  top: orientation == Orientation.portrait ? 40.h : 25.h,
+                                  top: orientation == Orientation.portrait
+                                      ? 40.h
+                                      : 25.h,
                                   left: 15.w,
                                   child: CircleAvatar(
-                                    radius: orientation == Orientation.portrait ? 22.r : 18.r,
+                                    radius: orientation == Orientation.portrait
+                                        ? 22.r
+                                        : 18.r,
                                     backgroundColor: Colors.white24,
                                     child: IconButton(
                                       padding: EdgeInsets.zero,
@@ -166,21 +179,32 @@ class _AppointmentState extends State<Appointment> {
                                       },
                                       icon: Image.asset(
                                         "assets/images/Icons/Patient/Frame.png",
-                                        height: orientation == Orientation.portrait ? 22.h : 18.h,
-                                        width: orientation == Orientation.portrait ? 22.w : 18.w,
+                                        height:
+                                            orientation == Orientation.portrait
+                                            ? 22.h
+                                            : 18.h,
+                                        width:
+                                            orientation == Orientation.portrait
+                                            ? 22.w
+                                            : 18.w,
                                         fit: BoxFit.contain,
                                       ),
                                     ),
                                   ),
                                 ),
                                 Positioned(
-                                  top: orientation == Orientation.portrait ? 45.h : 30.h,
+                                  top: orientation == Orientation.portrait
+                                      ? 45.h
+                                      : 30.h,
                                   left: 80.w,
                                   child: Text(
                                     "Book An appointment",
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: orientation == Orientation.portrait ? 20.sp : 16.sp,
+                                      fontSize:
+                                          orientation == Orientation.portrait
+                                          ? 20.sp
+                                          : 16.sp,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -205,20 +229,33 @@ class _AppointmentState extends State<Appointment> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("PATIENT",
-                                      style: TextStyle(color: Colors.grey, fontSize: 12.sp)),
+                                  Text(
+                                    "PATIENT",
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12.sp,
+                                    ),
+                                  ),
                                   SizedBox(height: 10.h),
                                   _patientCard(initials),
                                   SizedBox(height: 20.h),
-                                  Text("Select Date",
-                                      style: TextStyle(
-                                          fontSize: 18.sp, fontWeight: FontWeight.w600)),
+                                  Text(
+                                    "Select Date",
+                                    style: TextStyle(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
                                   SizedBox(height: 10.h),
                                   _dateSelector(),
                                   SizedBox(height: 20.h),
-                                  Text("Select Time",
-                                      style: TextStyle(
-                                          fontSize: 18.sp, fontWeight: FontWeight.w600)),
+                                  Text(
+                                    "Select Time",
+                                    style: TextStyle(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
                                   SizedBox(height: 5.h),
                                   _timeGrid(),
                                   SizedBox(height: 30.h),
@@ -230,7 +267,7 @@ class _AppointmentState extends State<Appointment> {
                               ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
 
@@ -251,7 +288,7 @@ class _AppointmentState extends State<Appointment> {
                         }
                         return const SizedBox.shrink();
                       },
-                    )
+                    ),
                   ],
                 ),
               );
@@ -277,7 +314,11 @@ class _AppointmentState extends State<Appointment> {
             backgroundColor: const Color(0xFF4FA3A5),
             child: Text(
               initials,
-              style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           SizedBox(width: 12.w),
@@ -293,7 +334,7 @@ class _AppointmentState extends State<Appointment> {
                 style: TextStyle(color: Colors.grey, fontSize: 13.sp),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -333,10 +374,11 @@ class _AppointmentState extends State<Appointment> {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: dateList.map((date) {
-              final isSelected = selectedDate.year == date.year &&
+              final isSelected =
+                  selectedDate.year == date.year &&
                   selectedDate.month == date.month &&
                   selectedDate.day == date.day;
-              
+
               final dayStr = DateFormat('E').format(date);
               final dateNum = DateFormat('d').format(date);
 
@@ -357,7 +399,7 @@ class _AppointmentState extends State<Appointment> {
               );
             }).toList(),
           ),
-        )
+        ),
       ],
     );
   }
@@ -397,9 +439,7 @@ class _AppointmentState extends State<Appointment> {
                         : null,
                     color: isSelected ? null : Colors.white,
                     borderRadius: BorderRadius.circular(14.r),
-                    border: Border.all(
-                      color: Colors.grey.shade300,
-                    ),
+                    border: Border.all(color: Colors.grey.shade300),
                   ),
                   child: Text(
                     displayTimes[index],
@@ -429,11 +469,14 @@ class _AppointmentState extends State<Appointment> {
         borderRadius: BorderRadius.circular(14.r),
       ),
       child: Center(
-        child: Text("Book Appointment",
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 16.sp)),
+        child: Text(
+          "Book Appointment",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 16.sp,
+          ),
+        ),
       ),
     );
   }

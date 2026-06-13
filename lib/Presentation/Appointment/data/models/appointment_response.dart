@@ -5,9 +5,12 @@ part 'appointment_response.g.dart';
 @JsonSerializable()
 class AppointmentResponse {
   final bool status;
+
   @JsonKey(name: 'status_code')
   final int statusCode;
+
   final String message;
+
   final AppointmentData? data;
 
   AppointmentResponse({
