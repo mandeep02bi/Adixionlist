@@ -57,6 +57,7 @@ class ContainerBody extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(child: buildRow('Mobile:', mobile)),
+                    /*
                     GestureDetector(
                       onTap: onEdit,
                       child: Container(
@@ -91,6 +92,8 @@ class ContainerBody extends StatelessWidget {
                         ),
                       ),
                     ),
+
+                     */
                   ],
                 ),
               ],
