@@ -19,4 +19,20 @@ class InvoiceState<T> with _$InvoiceState<T> {
   // Patients Fetch
   const factory InvoiceState.fetchPatientsSuccess(T data) = FetchPatientsSuccess<T>;
   const factory InvoiceState.fetchPatientsError({required String error}) = FetchPatientsError;
+
+  // Update
+  const factory InvoiceState.updateInvoiceSuccess(T data)
+  = UpdateInvoiceSuccess<T>;
+
+  const factory InvoiceState.updateInvoiceError({
+    required String error,
+  }) = UpdateInvoiceError;
+
+  // Delete
+  const factory InvoiceState.deleteInvoiceSuccess(T data)
+  = DeleteInvoiceSuccess<T>;
+
+  const factory InvoiceState.deleteInvoiceError({
+    required String error,
+  }) = DeleteInvoiceError;
 }

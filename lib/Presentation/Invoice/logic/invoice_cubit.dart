@@ -73,4 +73,75 @@ class InvoiceCubit extends Cubit<InvoiceState> {
       },
     );
   }
+
+
+  void getInvoiceDetails(int id) async {
+    emit(const InvoiceState.loading());
+
+    final response = await invoiceRepo.getInvoiceDetails(id);
+
+    response.when(
+      success: (data) {
+        emit(InvoiceState.fetchInvoicesSuccess(data));
+      },
+      error: (error) {
+        emit(
+          InvoiceState.fetchInvoicesError(
+            error: error.failure.message,
+          ),
+        );
+      },
+    );
+  }
+  Future<void> updateInvoice(
+      int id,
+      InvoiceRequestBody body,
+      List<InvoiceItemRequestBody> items,
+      ) async {
+
+    emit(const InvoiceState.loading());
+
+    final response =
+    await invoiceRepo.updateInvoice(id, body);
+
+    await response.when(
+      success: (data) async {
+
+        emit(
+          InvoiceState.updateInvoiceSuccess(data),
+        );
+      },
+      error: (error) {
+        emit(
+          InvoiceState.updateInvoiceError(
+            error: error.failure.message,
+          ),
+        );
+      },
+    );
+  }
+
+
+  void deleteInvoice(int id) async {
+    emit(const InvoiceState.loading());
+
+    final response =
+    await invoiceRepo.deleteInvoice(id);
+
+    response.when(
+      success: (data) {
+        emit(
+          InvoiceState.deleteInvoiceSuccess(data),
+        );
+      },
+      error: (error) {
+        emit(
+          InvoiceState.deleteInvoiceError(
+            error: error.failure.message,
+          ),
+        );
+      },
+    );
+  }
+
 }
